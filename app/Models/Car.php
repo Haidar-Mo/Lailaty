@@ -24,7 +24,8 @@ class Car extends Model
         'available',
         'number_of_seats',
         'rate',
-        'location',
+        'latitude',
+        'longitude',
     ];
 
     public function owner(): BelongsTo

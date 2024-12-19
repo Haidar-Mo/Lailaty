@@ -12,8 +12,10 @@ class OrderLocation extends Model
 
     protected $fillable = [
         'order_id',
-        'source',
-        'destination',
+        'source_latitude',
+        'source_longitude',
+        'destination_latitude',
+        'destination_longitude',
     ];
 
     public function order(): BelongsTo

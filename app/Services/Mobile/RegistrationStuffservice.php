@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 class RegistrationStuffservice
 {
-
     public function officeRegistration(User $user, array $data)
     {
-        
+
         return $user->office()->create($data);
     }
 
@@ -28,10 +27,10 @@ class RegistrationStuffservice
                 'value_added_tax_card' => 'value_added_tax_card_for_officeID',
                 'attached_document' => 'attached_document_for_officeID'
             ];
-
+            
             foreach ($documents as $document => $name) {
                 if ($request->hasFile($document)) {
-                    $fileName = time() . '_' . $name . $office->id . '-' . $request->file($document)->getClientOriginalExtension();
+                    $fileName = time() . '_' . $name . $office->id . '.' . $request->file($document)->getClientOriginalExtension();
 
                     $tempPath = $request->file($document)->storeAs('public/tmp', $fileName);
                     $tempFilePath = storage_path('app/' . $tempPath);
@@ -44,9 +43,9 @@ class RegistrationStuffservice
 
                     $uploadedPaths[$document] = $finalPath;
                 }
-                $office->documents()->Create($uploadedPaths);
-                return $uploadedPaths;
             }
+            $office->document()->Create($uploadedPaths);
+            return $uploadedPaths;
 
 
         } catch (Exception $e) {
