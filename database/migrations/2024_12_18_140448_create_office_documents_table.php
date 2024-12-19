@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('office_documents', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('office_id')->constrained('offices')->cascadeOnDelete();
             $table->string('tax_card');
             $table->string('commercial_registration_card');
             $table->string('insurance_card');

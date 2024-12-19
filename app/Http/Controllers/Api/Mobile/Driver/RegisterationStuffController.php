@@ -18,18 +18,32 @@ class RegisterationStuffController extends Controller
     {
         $this->registrationStuffService = $registrationStuffService;
     }
+
+    public function showMyOffice()
+    {
+        $user = Auth::user();
+        $office = $user->office()->with('document')->first();
+        return $office;
+    }
+
     public function officeRegister(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string',
-            'phone_number' => 'required',
-            'email' => 'required|email',
-            'Commercial_registration_number' => 'required',
-            'latitude' => 'nullable',
-            'longitude' => 'nullable'
+            'name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
+            'email' => 'required|email|unique:offices,email',
+            'commercial_registration_number' => 'required|string|unique:offices,commercial_registration_number',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $user = Auth::user();
+        if ($user->office()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User cannot have more than one office.',
+            ], 422);
+        }
         try {
 
             $office = $this->registrationStuffService->officeRegistration($user, $data);

@@ -18,7 +18,8 @@ class Office extends Model
         'phone_number',
         'email',
         'Commercial_registration_number',
-        'location',
+        'latitude',
+        'longitude',
     ];
 
 
