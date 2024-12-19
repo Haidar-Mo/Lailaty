@@ -1,0 +1,249 @@
+<?php
+
+namespace App\Http\Controllers\Api\Mobile\Auth;
+
+use App\Enums\TokenAbility;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\VerificationCodeNotification;
+use App\Rules\EgyptionPhoneNumber;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use DB;
+use Exception;
+use Str;
+
+class AuthController extends Controller
+{
+    /**
+     * Handle an authentication attempt for a user.
+     * 
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'phone_number' => ['required', 'string', 'exists:users,phone_number', new EgyptionPhoneNumber],
+            'password' => ['required', 'string'],
+            'deviceToken' => ['nullable']
+        ]);
+        $credentials = $request->only('phone_number', 'password');
+
+        if (!Auth::attempt($credentials)) {
+
+            return response()->json(['message' => 'يرجى التحقق من كلمة المرور أو رقم الهاتف'], 401);
+        }
+        $user = User::find(Auth::user()->id);
+        if ($request->has('deviceToken')) {
+            $user->update(['deviceToken' => $request->deviceToken]);
+        }
+        $user->tokens()->delete();
+
+        $accessToken = $user->createToken(
+            'access_token',
+            [TokenAbility::ACCESS_API->value, $user->roles()->first()->name],
+            Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
+        );
+
+        $refreshToken = $user->createToken(
+            'refresh_token',
+            [TokenAbility::ISSUE_ACCESS_TOKEN->value],
+            Carbon::now()->addMinutes(config('sanctum.re_expiration'))
+        );
+
+        $user->load('roles');
+        return response()->json([
+            'message' => 'تم تسجيل الدخول بنجاح',
+            'access_token' => $accessToken->plainTextToken,
+            'refresh_token' => $refreshToken->plainTextToken,
+            'user' => $user,
+        ], 200);
+    }
+
+    /**
+     * Register an email into the application
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function emailRegistration(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'unique:users,email', 'email']
+        ]);
+        $verificationCode = str::random(6);
+        $expirationTime = Carbon::now()->addMinutes(10);
+
+        $user = User::create([
+            'email' => $data['email'],
+            'verification_code' => $verificationCode,
+            'verification_code_expires_at' => $expirationTime
+        ]);
+        $user->notify(new VerificationCodeNotification($verificationCode));
+
+        return response()->json(['message' => 'Email registration done. Verification email sent.'], 200);
+    }
+
+    /**
+     * Resend verification code for an unactivatied existing email
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function resendVerificationCode(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'exists:users,email'],
+        ]);
+        $user = User::where('email', $request->email)->firstOrFail();
+        if ($user->hasVerifiedEmail())
+            return response()->json(['message' => 'Email is already verified'], 405);
+        $verificationCode = str::random(6);
+        $expirationTime = Carbon::now()->addMinutes(10);
+        $user->update([
+            'verification_code' => $verificationCode,
+            'verification_code_expires_at' => $expirationTime
+        ]);
+        $user->notify(new VerificationCodeNotification($verificationCode));
+
+        return response()->json(['message' => 'Verification code has been resended'], 200);
+    }
+
+    /**
+     * Verify the previously registered email.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function verifyEmail(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+            'verification_code' => ['required', 'string']
+        ]);
+
+        $user = User::where('email', $data['email'])->firstOrFail();
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'your Email is already verified'], 422);
+        }
+        if ($user->verification_code_expires_at <= now() || $user->verification_code != $data['verification_code']) {
+            return response()->json(['message' => 'your verification code may be expired or it is incorrect'], 422);
+        }
+
+        $user->update([
+            'email_verified_at' => now(),
+            'verification_code' => null,
+            'verification_code_expires_at' => null
+        ]);
+
+        return response()->json(['message' => 'Email verified successfully'], 200);
+    }
+
+    /**
+     * Register the rest of the information to the previously registered email.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function informationRegistration(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                "first_name" => ['required', 'string'],
+                "last_name" => ['required', 'string'],
+                "email" => ['required', 'email'],
+                "password" => ['required', 'confirmed', 'string', 'min:6'],
+                "phone_number" => ['required', 'string', 'unique:users,phone_number', new EgyptionPhoneNumber],
+                "gender" => ['required', 'in:male,female'],
+                "deviceToken" => ['nullable'],
+                "city" => ['required'],
+                "role" => ['required'],
+            ]);
+            $user = User::where('email', $request->email)->firstOrFail();
+
+            if (!$user->email_verified_at) {
+                return response()->json(['message' => 'your Email is not verified'], 422);
+            }
+
+            $user->update($request->except(['email']));
+            $user->assignRole($request->role);
+
+            $accessToken = $user->createToken(
+                'access_token',
+                [TokenAbility::ACCESS_API->value, $user->roles()->first()->name],
+                Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
+            );
+
+            $refreshToken = $user->createToken(
+                'refresh_token',
+                [TokenAbility::ISSUE_ACCESS_TOKEN->value],
+                Carbon::now()->addMinutes(config('sanctum.re_expiration'))
+            );
+
+            $user->load('roles');
+            $user['role_name'] = $user->roles[0]->name;
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Registration is completely done',
+                'access_token' => $accessToken->plainTextToken,
+                'refresh_token' => $refreshToken->plainTextToken,
+                'user' => $user,
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+
+    }
+
+
+    /**
+     * Delete all user's access token and log the user out of the application.
+     * 
+     * @return JsonResponse
+     */
+    public function logout()
+    {
+        Auth::user()->currentAccessToken()->delete();
+        return response()->json(null, 200);
+    }
+
+    /**
+     * Refresh an out of date token.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function refreshToken(Request $request)
+    {
+        $user = $request->user();
+        $user->tokens()->delete();
+        $accessToken = $user->createToken(
+            'access_token',
+            [TokenAbility::ACCESS_API->value, 'role:' . $user->roles->first()->name],
+            Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
+        );
+
+        $refreshToken = $user->createToken(
+            'refresh_token',
+            [TokenAbility::ISSUE_ACCESS_TOKEN->value],
+            Carbon::now()->addMinutes(config('sanctum.rt_expiration'))
+        );
+        return response()->json([
+            'message' => '.تم إنشاء الرمز بنجاح',
+            'access_token' => $accessToken->plainTextToken,
+            'refresh_token' => $refreshToken->plainTextToken,
+            'user' => $user,
+        ]);
+    }
+
+
+}
