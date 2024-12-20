@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\TokenAbility;
+use App\Http\Controllers\Api\Mobile\Auth\RegistratoinController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\Auth\AuthController;
 use App\Http\Controllers\Api\Mobile\Auth\ResetPasswordController;
@@ -10,10 +11,10 @@ Route::group(["prefix" => "auth",], function () {
 
     Route::post('login', [AuthController::class, 'login']);
 
-    Route::post('emailRegistration', [AuthController::class, 'emailRegistration']);
-    Route::post('verifyEmail', [AuthController::class, 'verifyEmail']);
-    Route::post('resendVerificationCode', [AuthController::class, 'resendVerificationCode']);
-    Route::post('informationRegistration', [AuthController::class, 'informationRegistration']);
+    Route::post('emailRegistration', [RegistratoinController::class, 'Register']);
+    Route::post('verifyEmail', [RegistratoinController::class, 'verifyEmail']);
+    Route::post('resendVerificationCode', [RegistratoinController::class, 'resendVerificationCode']);
+    Route::post('informationRegistration', [RegistratoinController::class, 'informationRegistration']);
 
     Route::post('forgot-password', [ResetPasswordController::class, 'sendResetLink'])->name('password.request');
     Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
