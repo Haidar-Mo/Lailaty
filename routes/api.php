@@ -17,12 +17,13 @@ use Illuminate\Support\Facades\Route;
 include __DIR__ . "/v1/Mobile/AuthMobile.php";
 include __DIR__ . "/v1/Mobile/Profile.php";
 include __DIR__ . "/v1/Mobile/Driver.php";
+include __DIR__ . "/v1/Mobile/RegisterDocuments.php";
 
 
 Route::get("/image", function (Request $request) {
 
-    
-    // continue to test optimize image 
+
+    // continue to test optimize image
 
 
 });
