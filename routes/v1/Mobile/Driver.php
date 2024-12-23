@@ -3,6 +3,7 @@
 use App\Enums\TokenAbility;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\Driver\RegisterationStuffController;
+use App\Http\Controllers\Api\Mobile\Driver\DocumentsRegisterController;
 
 
 Route::prefix('captain')
@@ -11,11 +12,7 @@ Route::prefix('captain')
         'ability:' . TokenAbility::ACCESS_API->value
     ])
     ->group(function () {
-        Route::middleware(['role:officeOwner'])->
-            get('office/show', [RegisterationStuffController::class, 'showMyoffice']);
-        Route::middleware(['role:officeOwner'])->
-            post('office/create', [RegisterationStuffController::class, 'officeRegister']);
-        Route::middleware(['role:officeOwner'])->
-            post('office/document/create', [RegisterationStuffController::class, 'officeDocumentsRegister']);
-
+        Route::middleware(['role:officeOwner'])->post('office/create', [RegisterationStuffController::class, 'officeRegister']);
+        //Route::middleware(['isCaptain'])->post('Documents/update', [DocumentsRegisterController::class, 'update']);
+        //Route::middleware(['isCaptain'])->post('Documents/create', [DocumentsRegisterController::class, 'store']);
     });
