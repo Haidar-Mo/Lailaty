@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('driver_license_backFace');
             $table->string('personal_card_frontFace');
             $table->string('personal_card_backFace');
-            $table->string('criminal_record');
+            $table->string('criminal_record')->default(' ');
             $table->timestamps();
         });
     }
