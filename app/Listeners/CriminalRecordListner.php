@@ -9,22 +9,10 @@ use App\Notifications\CriminalRecordNotification;
 use Illuminate\Support\Facades\Notification;
 class CriminalRecordListner
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
 
-    }
-
-    /**
-     * Handle the event.
-     */
     public function handle(CriminalRecordEvent $event): void
     {
-        $message = $event->message;
-        $user = $event->user; 
 
-        Notification::send($user, new CriminalRecordNotification($message));
+        $event->user->notify(new CriminalRecordNotification($event->message));
     }
 }

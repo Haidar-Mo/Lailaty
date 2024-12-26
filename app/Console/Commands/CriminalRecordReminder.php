@@ -27,13 +27,12 @@ class CriminalRecordReminder extends Command
      */
     public function handle()
     {
-        $users = User::get();
+        $users = User::role(['freeDriver', 'employeeDriver'])->get();
 
         foreach ($users as $user) {
             if ($user->registrationDocument) {
-                if (empty($user->registrationDocument->criminal_record) &&
-                    in_array($user->getRoleNames()[0], ['freeDriver', 'employeeDriver'])) {
-                    $Date = Carbon::parse($user->registrationDocument->created_at)->addMonths(3)->format('Y-m-d');
+                if (trim($user->registrationDocument->criminal_record) === '') {
+                    $Date = Carbon::parse($user->created_at)->addMonths(3)->format('Y-m-d');
                     event(new CriminalRecordEvent("يرجى ادخال الفيش الجنائي قبل تاريخ $Date",$user));
                 }
             }
