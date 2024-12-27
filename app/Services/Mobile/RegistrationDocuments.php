@@ -22,7 +22,7 @@ class RegistrationDocuments
 
     try {
         DB::beginTransaction();
-        $fileNames = $this->setFileName(array_values($document), 'Documents');
+        $fileNames = $this->setFileName(array_values($document), 'DocumentsRegistration');
         foreach ($document as $key => $file) {
              $this->saveFile([$file], [$fileNames[array_search($key, array_keys($document))]], 'public');
 

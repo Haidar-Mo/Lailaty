@@ -18,6 +18,7 @@ include __DIR__ . "/v1/Mobile/AuthMobile.php";
 include __DIR__ . "/v1/Mobile/Profile.php";
 include __DIR__ . "/v1/Mobile/Driver.php";
 include __DIR__ . "/v1/Mobile/RegisterDocuments.php";
+include __DIR__ . "/v1/Mobile/Report.php";
 
 
 Route::get("/image", function (Request $request) {
