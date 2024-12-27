@@ -17,51 +17,51 @@ class RegistrationDocuments
     use HasFiles;
 
     public function DocumentsRegistration($document, $user)
-{
-    $uploadedPaths = [];
+    {
+        $uploadedPaths = [];
 
-    try {
-        DB::beginTransaction();
-        $fileNames = $this->setFileName(array_values($document), 'DocumentsRegistration');
-        foreach ($document as $key => $file) {
-             $this->saveFile([$file], [$fileNames[array_search($key, array_keys($document))]], 'public');
-
-            $uploadedPaths[$key] = $fileNames[array_search($key, array_keys($document))];
-        }
-        $user->registrationDocument()->create($uploadedPaths);
-        DB::commit();
-    } catch (Exception $e) {
-        DB::rollBack();
-        return response()->json(['message' => '! حدث خطأ ما ']);
-    }
-}
-
-
-public function updateDocumentsRegistration(array $files, $existingDocument){
-    $oldFiles = [];
-    try{
-     DB::beginTransaction();
-    foreach ($files as $key => $newFile) {
-        if ($newFile) {
-            $currentFile = $existingDocument->$key;
-            $newFileName = $this->setFileName([$newFile], 'Documents')[0];
-
-            if ($currentFile) {
-                $oldFiles[] = $currentFile;
-                $existingDocument->update([$key => $newFileName]);
+        try {
+            DB::beginTransaction();
+            foreach ($document as $key => $file) {
+                $fileName = $this->saveFile($file, "RegistirationDocuments");
+                $uploadedPaths[$key] = $fileName;
             }
-
-            $this->saveFile([$newFile], [$newFileName], 'public');
+            $user->registrationDocument()->create($uploadedPaths);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-    if (!empty($oldFiles)) {
-        $this->deleteFile('Documents', $oldFiles);
+
+
+    public function updateDocumentsRegistration(array $files, $existingDocument)
+    {
+        $oldFiles = [];
+        try {
+            DB::beginTransaction();
+            foreach ($files as $key => $newFile) {
+                if ($newFile) {
+                    $currentFile = $existingDocument->$key;
+
+                    $newFileName = $this->saveFile($newFile, "RegistirationDocuments");
+
+                    if ($currentFile) {
+                        $oldFiles[] = $currentFile;
+                        $existingDocument->update([$key => $newFileName]);
+                    }
+
+                }
+            }
+            if (!empty($oldFiles)) {
+                foreach ($oldFiles as $file)
+                    $this->deleteFile($file);
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
     }
-    DB::commit();
-}catch(Exception $e){
-    DB::rollBack();
-}
-}
 
 
 
