@@ -28,7 +28,8 @@ class OfficeDocument extends Model
 
 
     /** Accessories */
-    public function getTaxCardAttribute($value)
+    
+   /* public function getTaxCardAttribute($value)
     {
         return $value ? url('storage/' . $value) : null;
     }
@@ -51,5 +52,5 @@ class OfficeDocument extends Model
     public function getAttachedDocumentAttribute($value)
     {
         return $value ? url('storage/' . $value) : null;
-    }
+    }*/
 }
