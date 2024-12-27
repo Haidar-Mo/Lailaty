@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\Mobile\Auth\AuthController;
 use App\Http\Controllers\Api\Mobile\Auth\ResetPasswordController;
 
 
-Route::group(["prefix" => "auth",], function () {
+Route::prefix('auth')->group(function () {
 
     Route::post('login', [AuthController::class, 'login']);
 

@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        User::create([
+        $mario = User::create([
             'email' => 'example@gmail.com',
             'password' => bcrypt('password'),
             'phone_number' => '+201231231236',
@@ -27,13 +27,13 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
             'rate' => 5,
             'email_verified_at' => now(),
-            //'verification_code' => '123456',
-           // 'verification_code_expires_at' => now()->addMinutes(30),
         ]);
+        $mario->assignRole('freeDriver');
 
         $this->call(RolesSeeder::class);
 
         $this->call(PermissionSeeder::class);
+
 
         $this->call(CarBrandSeed::class);
 
@@ -41,33 +41,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AssignPermissionsToRolesSeeder::class);
 
+        $this->call(AssignPermissionsToRolesSeeder::class);
 
 
-        /*Service::insert(
-            [
-                [
-                    'name' => 'in_city'
-                ],
-                [
-                    'name' => 'luxury'
-                ],
-                [
-                    'name' => 'across_cities'
-                ],
-                [
-                    'name' => 'wedding'
-                ],
-                [
-                    'name' => 'your_mood'
-                ],
-                [
-                    'name' => 'driving_teaching'
-                ],
-                [
-                    'name' => 'shipping'
-                ],
-            ]
-        );*/
 
 
     }
