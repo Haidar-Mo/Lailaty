@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\{
 
 class DocumentsRegisterController extends Controller
 {
-    use Responses,HasFiles;
+    use Responses, HasFiles;
     protected $registration;
 
     public function __construct(RegistrationDocuments $registration)
@@ -32,10 +32,10 @@ class DocumentsRegisterController extends Controller
     }
 
 
-
-    public function store(Documents $request) {
+    public function store(Documents $request)
+    {
         $user = Auth::user();
-        
+
         $validatedData = $request->validated();
 
         try {
@@ -43,14 +43,11 @@ class DocumentsRegisterController extends Controller
                 $this->registration->DocumentsRegistration($validatedData, $user);
             });
             return $this->sudResponse("تم تسجيل الوثائق بنجاح !");
+        } catch (Exception $e) {
 
-        } catch (\Exception $e) {
-
-           return $this->sudResponse("حدث خطأ ما !");
+            return $this->sudResponse("حدث خطأ ما !");
         }
     }
-
-
 
     public function update(UpdateDocuments $request)
     {

@@ -11,6 +11,9 @@ Route::prefix('captain')
         'ability:' . TokenAbility::ACCESS_API->value
     ])
     ->group(function () {
-        Route::middleware('isCaptain')->apiResource('Documents',DocumentsRegisterController::class);
-        Route::middleware(['isCaptain'])->post('Documents/update', [DocumentsRegisterController::class, 'update']);
+        Route::middleware(['role:freeDriver|employeeDrive|officeOwner'])
+            ->apiResource('Documents', DocumentsRegisterController::class);
+        
+            Route::middleware(['role:freeDriver|employeeDriver|officeOwner'])
+            ->post('Documents/update', [DocumentsRegisterController::class, 'update']);
     });
