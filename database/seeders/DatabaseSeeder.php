@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\CarBrand;
 use App\Models\Service;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -27,40 +29,21 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
         $mario->assignRole('freeDriver');
-/*
+
         $this->call(RolesSeeder::class);
 
         $this->call(PermissionSeeder::class);
 
-        $this->call(AssignPermissionsToRolesSeeder::class);*/
+
+        $this->call(CarBrandSeed::class);
+
+        $this->call(ServicesSeeder::class);
+
+        $this->call(AssignPermissionsToRolesSeeder::class);
+
+        $this->call(AssignPermissionsToRolesSeeder::class);
 
 
-
-        /*Service::insert(
-            [
-                [
-                    'name' => 'in_city'
-                ],
-                [
-                    'name' => 'luxury'
-                ],
-                [
-                    'name' => 'across_cities'
-                ],
-                [
-                    'name' => 'wedding'
-                ],
-                [
-                    'name' => 'your_mood'
-                ],
-                [
-                    'name' => 'driving_teaching'
-                ],
-                [
-                    'name' => 'shipping'
-                ],
-            ]
-        );*/
 
 
     }
