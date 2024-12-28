@@ -139,6 +139,7 @@ class RegistratoinController extends Controller
                 "deviceToken" => ['nullable'],
                 "city" => ['required'],
                 "role" => ['required'],
+                "can_create_office" => ['nullable']
             ]);
             $pending_user = PendingUser::where('email', $request->email)->firstOrFail();
 

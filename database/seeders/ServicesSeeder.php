@@ -13,56 +13,56 @@ class ServicesSeeder extends Seeder
      */
     public function run(): void
     {
-         /*Service::insert(
+        /*Service::insert(
+           [
+               [
+                   'name' => 'in_city'
+               ],
+               [
+                   'name' => 'luxury'
+               ],
+               [
+                   'name' => 'across_cities'
+               ],
+               [
+                   'name' => 'wedding'
+               ],
+               [
+                   'name' => 'your_mood'
+               ],
+               [
+                   'name' => 'driving_teaching'
+               ],
+               [
+                   'name' => 'shipping'
+               ],
+           ]
+       );*/
+        $services = [
             [
-                [
-                    'name' => 'in_city'
-                ],
-                [
-                    'name' => 'luxury'
-                ],
-                [
-                    'name' => 'across_cities'
-                ],
-                [
-                    'name' => 'wedding'
-                ],
-                [
-                    'name' => 'your_mood'
-                ],
-                [
-                    'name' => 'driving_teaching'
-                ],
-                [
-                    'name' => 'shipping'
-                ],
-            ]
-        );*/
-        $services=[
+                'name' => 'زفاف',
+            ],
             [
-                'name'=>'زفاف',
-        ],
-        [
-            'name'=>'داخلي'
-        ],
-        [
-            'name'=>'على مودك'
-        ],
-        [
-            'name'=>'شحن'
-        ],
-        [
-            'name'=>'تعليم قيادة'
-        ],
-        [
-            'name'=>'ليكجري'
-        ],
-        [
-            'name'=>'سفر'
-        ],
+                'name' => 'داخلي'
+            ],
+            [
+                'name' => 'على مودك'
+            ],
+            [
+                'name' => 'شحن'
+            ],
+            [
+                'name' => 'تعليم قيادة'
+            ],
+            [
+                'name' => 'ليكجري'
+            ],
+            [
+                'name' => 'سفر'
+            ],
 
         ];
-        foreach($services as $service){
+        foreach ($services as $service) {
             Service::create($service);
         }
     }

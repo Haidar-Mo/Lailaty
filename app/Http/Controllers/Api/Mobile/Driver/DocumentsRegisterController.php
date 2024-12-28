@@ -24,28 +24,28 @@ use Illuminate\Support\Facades\{
 class DocumentsRegisterController extends Controller
 {
     use Responses, HasFiles;
-    protected $registration;
 
-    public function __construct(RegistrationDocuments $registration)
+    public function __construct(protected RegistrationDocuments $registration)
     {
-        $this->registration = $registration;
+        
     }
 
 
     public function store(Documents $request)
     {
         $user = Auth::user();
-
+        if ($user->registrationDocument()->first())
+            return $this->sudResponse("الوثائق مسجلة لديك بالفعل", 422);
         $validatedData = $request->validated();
 
         try {
             DB::transaction(function () use ($validatedData, $user) {
                 $this->registration->DocumentsRegistration($validatedData, $user);
             });
-            return $this->sudResponse("تم تسجيل الوثائق بنجاح !");
+            return $this->sudResponse("تم تسجيل الوثائق بنجاح !", 200);
         } catch (Exception $e) {
 
-            return $this->sudResponse("حدث خطأ ما !");
+            return $this->sudResponse($e->getMessage(), 500);
         }
     }
 
@@ -57,10 +57,10 @@ class DocumentsRegisterController extends Controller
         try {
             $this->registration->updateDocumentsRegistration($request->all(), $existingDocument);
             DB::commit();
-            return $this->sudResponse("! تم تحديث الوثائق بنجاح ");
+            return $this->sudResponse("! تم تحديث الوثائق بنجاح ", 200);
         } catch (Exception $e) {
             DB::rollback();
-            return $this->sudResponse("! حدث خطأ ما ");
+            return $this->sudResponse($e->getMessage(), 500);
         }
     }
 

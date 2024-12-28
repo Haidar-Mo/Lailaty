@@ -28,7 +28,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to admin role successfully.');
         } else {
-            $this->command->error('Role "admin" not found. Please ensure it exists.');
+            $this->command->error('Role "admin" not found. Please ensure it is exists.');
         }
 
         // Assign permissions for Client Role
@@ -40,7 +40,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to client role successfully.');
         } else {
-            $this->command->error('Role "client" not found. Please ensure it exists.');
+            $this->command->error('Role "client" not found. Please ensure it is exists.');
         }
 
         // Assign permissions for Office-Owner Role
@@ -52,7 +52,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to officeOwner role successfully.');
         } else {
-            $this->command->error('Role "officeOwner" not found. Please ensure it exists.');
+            $this->command->error('Role "officeOwner" not found. Please ensure it is exists.');
         }
 
 
@@ -65,7 +65,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to freeDriver role successfully.');
         } else {
-            $this->command->error('Role "freeDriver" not found. Please ensure it exists.');
+            $this->command->error('Role "freeDriver" not found. Please ensure it is exists.');
         }
 
 
@@ -78,7 +78,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to employeeDriver role successfully.');
         } else {
-            $this->command->error('Role "employeeDriver" not found. Please ensure it exists.');
+            $this->command->error('Role "employeeDriver" not found. Please ensure it is exists.');
         }
     }
 }

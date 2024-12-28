@@ -12,12 +12,9 @@ use Exception;
 class ProfileController extends Controller
 {
 
-    protected $profileImageService;
-
-
-    public function __construct(ProfileService $profileImageService)
+    public function __construct(protected ProfileService $profileImageService)
     {
-        $this->profileImageService = $profileImageService;
+
     }
 
 

@@ -20,8 +20,8 @@ class RolesSeeder extends Seeder
                     'guard_name' => 'api'
                 ],
                 [
-                    'name' => 'officeOwner',
-                    'guard_name' => 'api'
+                    'name'=>'fleetOwner',
+                    'gaurd_name'=>'api'
                 ],
                 [
                     'name' => 'freeDriver',
