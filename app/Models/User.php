@@ -21,7 +21,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions;
 
-    
+
     protected $fillable = [
         'email',
         'password',
@@ -32,7 +32,7 @@ class User extends Authenticatable
         'deviceToken',
         'is_active',
         'full_registered',
-        'rate',
+       // 'rate',
         'office_id',
         'email_verified_at',
         'verification_code',
@@ -40,7 +40,8 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'image_url'
+        'image_url',
+        'rate',
     ];
 
     /**
@@ -117,7 +118,7 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
-    public function rate(): HasMany
+     public function rate(): HasMany
     {
         return $this->hasMany(Rate::class);
     }
@@ -137,4 +138,19 @@ class User extends Authenticatable
         }
         return null;
     }
+
+    public function getRateAttribute():float
+    {
+        if ($this->getRoleNames()[0] === 'client') {
+            $ratings = $this->rated;
+            if ($ratings->isNotEmpty()) {
+                $total = $ratings->sum('rate');
+                return round($total / $ratings->count(), 1);
+            }
+        }
+        return 0;
+    }
+
+
+
 }

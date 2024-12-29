@@ -25,10 +25,22 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
             'deviceToken' => 'some_random_device_token',
             'is_active' => true,
-            'rate' => 5,
+            //'rate' => 5,
             'email_verified_at' => now(),
         ]);
-        $mario->assignRole('freeDriver');
+        $haider = User::create([
+            'email' => 'Haider@gmail.com',
+            'password' => bcrypt('password'),
+            'phone_number' => '+201231231237',
+            'first_name' => 'محمد',
+            'last_name' => 'حيدر',
+            'gender' => 'male',
+            'deviceToken' => 'some_random_device_token',
+            'is_active' => true,
+            //'rate' => 5,
+            'email_verified_at' => now(),
+        ]);
+       // $mario->assignRole('freeDriver');
 
         $this->call(RolesSeeder::class);
 
