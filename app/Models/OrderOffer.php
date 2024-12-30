@@ -28,8 +28,8 @@ class OrderOffer extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function car(): BelongsTo
+    public function vehicle(): BelongsTo
     {
-        return $this->belongsTo(Car::class);
+        return $this->belongsTo(Vehicle::class);
     }
 }

@@ -21,7 +21,7 @@ class RolesSeeder extends Seeder
                 ],
                 [
                     'name'=>'fleetOwner',
-                    'gaurd_name'=>'api'
+                    'guard_name'=>'api'
                 ],
                 [
                     'name' => 'freeDriver',

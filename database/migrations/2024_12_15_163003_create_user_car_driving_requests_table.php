@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('user_car_driving_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete();
+            $table->foreignId('car_id')->constrained('vehicles')->cascadeOnDelete();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });

@@ -18,9 +18,9 @@ class WeddingCategory extends Model
 
 
     
-    public function car(): HasMany
+    public function vehicle(): HasMany
     {
-        return $this->hasMany(Car::class);
+        return $this->hasMany(Vehicle::class);
     }
 
 }

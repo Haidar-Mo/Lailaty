@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
             'deviceToken' => 'some_random_device_token',
             'is_active' => true,
-            'rate' => 5,
             'email_verified_at' => now(),
         ]);
         $haidar = User::create([
@@ -37,16 +36,12 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
             'deviceToken' => 'QWERTYUIOPASDFGHJKLZXCVBNM',
             'is_active' => true,
-            'rate' => 5,
             'email_verified_at' => now(),
         ]);
-        $mario->assignRole('freeDriver');
-        $haidar->assignRole('freeDriver');
-
+       
         $this->call(RolesSeeder::class);
 
         $this->call(PermissionSeeder::class);
-
 
         $this->call(CarBrandSeed::class);
 
@@ -54,10 +49,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AssignPermissionsToRolesSeeder::class);
 
-        $this->call(AssignPermissionsToRolesSeeder::class);
-
-
-
+        $mario->assignRole('freeDriver');
+        $haidar->assignRole('fleetOwner');
 
     }
 }

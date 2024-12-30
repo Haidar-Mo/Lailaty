@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Mobile;
 
 use App\Http\Controllers\Controller;
 use App\Services\Mobile\ProfileService;
+use App\Traits\Responses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -12,6 +13,7 @@ use Exception;
 class ProfileController extends Controller
 {
 
+    use Responses;
     public function __construct(protected ProfileService $profileImageService)
     {
 
@@ -26,11 +28,9 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        return response()->json([
-            'success' => true,
-            'messgae' => 'showing profile',
-            'user' => $user
-        ]);
+        $user->load('roles');
+        return $this->indexOrShowResponse('user', $user, 200);
+
     }
 
 

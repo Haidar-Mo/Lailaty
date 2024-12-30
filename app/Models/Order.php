@@ -31,9 +31,9 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function car(): BelongsTo
+    public function vehicle(): BelongsTo
     {
-        return $this->belongsTo(Car::class);
+        return $this->belongsTo(Vehicle::class);
     }
 
     public function service(): BelongsTo

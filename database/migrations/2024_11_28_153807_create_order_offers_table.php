@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('order_offers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete();
+            $table->foreignId('car_id')->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->float('price');
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');

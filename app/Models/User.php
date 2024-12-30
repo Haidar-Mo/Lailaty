@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,7 +22,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions;
 
-    
+
     protected $fillable = [
         'email',
         'password',
@@ -40,7 +41,8 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'image_url'
+        'image_url',
+        'rate'
     ];
 
     /**
@@ -80,17 +82,18 @@ class User extends Authenticatable
         return $this->hasOne(RegistrationDocument::class);
     }
 
-    public function workIn(): BelongsTo
-    {
-        return $this->belongsTo(Office::class, 'office_id');
-    }
     public function office(): HasOne
     {
         return $this->hasOne(Office::class);
     }
-    public function car(): HasMany
+    public function vehicle(): HasMany
     {
-        return $this->hasMany(Car::class);
+        return $this->hasMany(Vehicle::class);
+    }
+
+    public function driveVeicle(): HasOne
+    {
+        return $this->hasOne(Vehicle::class, 'driver_id');
     }
 
     public function drivingRequest(): HasMany
@@ -122,9 +125,9 @@ class User extends Authenticatable
         return $this->hasMany(Rate::class);
     }
 
-    public function rated(): MorphToMany
+    public function rated(): MorphMany
     {
-        return $this->morphToMany(Rate::class, 'rateable');
+        return $this->morphMany(Rate::class, 'rateable');
     }
 
 
@@ -136,5 +139,15 @@ class User extends Authenticatable
             return Storage::disk('public')->url($this->image->path);
         }
         return null;
+    }
+
+    public function getRateAttribute()
+    {
+        $count = $this->rate()->count();
+        if ($count > 0)
+            return $rate = $this->rate()->sum('rate') / $count;
+        else {
+            return 0;
+        }
     }
 }

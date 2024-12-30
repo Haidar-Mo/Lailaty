@@ -14,8 +14,9 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            ['name' => 'insert_registration_document', 'guard_name' => 'api'],
-            ['name' => 'insert_profile_image', 'guard_name' => 'api'],
+            ['name' => 'insert-registration-document', 'guard_name' => 'api'],
+            ['name' => 'insert-profile-image', 'guard_name' => 'api'],
+            ['name' => 'create-office', 'guard_name' => 'api'],
         ];
 
         foreach ($permissions as $permission) {
