@@ -14,8 +14,9 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('Criminal-Record')->everyMinute();
-        $schedule->command('Criminal-Record-Reminder')->everyMinute();
+        $schedule->command('Criminal-Record')->dailyAt('00:00');
+        $schedule->command('Criminal-Record-Reminder')->dailyAt('00:00');
+
     }
 
     /**

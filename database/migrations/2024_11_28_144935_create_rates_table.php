@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->morphs('rateable');
             $table->float('rate', 2, 1);
-            $table->text('description')->nullable();
+            $table->text('description')->default(' ');
             $table->timestamps();
         });
     }
