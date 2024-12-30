@@ -30,7 +30,7 @@ class VehicleController extends Controller
     {
 
     }
-    public function store(Request $request, $vehicleType)
+    public function store(Request $request, VehicleType $vehicleType)
     {
 
         $rules = match ($vehicleType) {
