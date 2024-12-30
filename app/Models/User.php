@@ -139,17 +139,7 @@ class User extends Authenticatable
         return null;
     }
 
-    public function getRateAttribute():float
-    {
-        if ($this->getRoleNames()[0] === 'client') {
-            $ratings = $this->rated;
-            if ($ratings->isNotEmpty()) {
-                $total = $ratings->sum('rate');
-                return round($total / $ratings->count(), 1);
-            }
-        }
-        return 0;
-    }
+   
 
 
 
