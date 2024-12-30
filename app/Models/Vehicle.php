@@ -23,7 +23,7 @@ class Vehicle extends Model
         'original_car_brand_id',
         'available',
         'number_of_seats',
-        'rate',
+        //'rate',
         'latitude',
         'longitude',
     ];

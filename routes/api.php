@@ -19,6 +19,6 @@ Route::prefix('v1/')->group(function () {
     include __DIR__ . "/v1/Mobile/Driver.php";
     include __DIR__ . "/v1/Mobile/RegisterDocuments.php";
     include __DIR__ . "/v1/Mobile/Report.php";
-
+    include __DIR__ . "/v1/Mobile/Rate.php";
 });
 
