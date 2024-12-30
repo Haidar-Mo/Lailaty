@@ -14,12 +14,9 @@ class OfficeRegisterationController extends Controller
 {
     use Responses;
 
-    protected $registrationStuffService;
-
-
-    public function __construct(OfficeRegistrationService $registrationStuffService)
+    public function __construct(protected OfficeRegistrationService $registrationStuffService)
     {
-        $this->registrationStuffService = $registrationStuffService;
+
     }
 
     public function show()

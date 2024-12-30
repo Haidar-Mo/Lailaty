@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\{
     Collection,
     Model
 };
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +19,7 @@ trait Responses {
         ], $code);
     }
 
-    public function indexOrShowResponse(string $data_key, Collection|Model|int|array|JsonResource $data, int $code = 200) : JsonResponse {
+    public function indexOrShowResponse(string $data_key, Builder|Collection|Model|int|array|JsonResource $data, int $code = 200) : JsonResponse {
         return response()->json([
             $data_key => $data
         ], $code);

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('car_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete();
+            $table->foreignId('car_id')->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->float('price')->nullable();
             $table->boolean('with_notification')->default(false);

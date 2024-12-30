@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Car extends Model
+class Vehicle extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'owber_id',
+        'user_id',
         'driver_id',
         'wedding_category_id',
         'car_brand_id',
+        'model_year',
         'gear_type',
         'is_modified',
         'original_car_brand_id',
@@ -27,6 +27,13 @@ class Car extends Model
         'latitude',
         'longitude',
     ];
+
+
+    protected $appends = [
+        'rate',
+    ];
+
+
 
     public function owner(): BelongsTo
     {
@@ -73,8 +80,22 @@ class Car extends Model
         return $this->hasMany(OrderOffer::class);
     }
 
-    public function rate(): HasMany
+    public function rated(): MorphMany
     {
-        return $this->hasMany(Rate::class);
+        return $this->morphMany(Rate::class,'rateable');
+    }
+
+
+
+    /** Accessories */
+
+    public function getRateAttribute()
+    {
+        $count = $this->rated()->count();
+        if ($count > 0)
+            return  $this->rate()->sum('rate') / $count;
+        else {
+            return 0;
+        }
     }
 }

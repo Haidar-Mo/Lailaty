@@ -15,7 +15,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
     {
         $admin = Role::findByName('admin');
         $client = Role::findByName('client');
-        $officeOwner = Role::findByName('officeOwner');
+        $fleetOwner = Role::findByName('fleetOwner');
         $freeDriver = Role::findByName('freeDriver');
         $employeeDriver = Role::findByName('employeeDriver');
 
@@ -28,7 +28,7 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to admin role successfully.');
         } else {
-            $this->command->error('Role "admin" not found. Please ensure it exists.');
+            $this->command->error('Role "admin" not found. Please ensure it is exists.');
         }
 
         // Assign permissions for Client Role
@@ -40,45 +40,45 @@ class AssignPermissionsToRolesSeeder extends Seeder
 
             $this->command->info('Permissions assigned to client role successfully.');
         } else {
-            $this->command->error('Role "client" not found. Please ensure it exists.');
+            $this->command->error('Role "client" not found. Please ensure it is exists.');
         }
 
         // Assign permissions for Office-Owner Role
-        if ($officeOwner) {
-            $officeOwner->syncPermissions([
-                '',
+        if ($fleetOwner) {
+            $fleetOwner->syncPermissions([
+                'create-office',
                 ''
             ]);
 
-            $this->command->info('Permissions assigned to officeOwner role successfully.');
+            $this->command->info('Permissions assigned to fleetOwner role successfully.');
         } else {
-            $this->command->error('Role "officeOwner" not found. Please ensure it exists.');
+            $this->command->error('Role "fleetOwner" not found. Please ensure it is exists.');
         }
 
 
         // Assign permissions for free-driver Role
         if ($freeDriver) {
             $freeDriver->syncPermissions([
-                'insert_profile_image',
-                'insert_registration_document'
+                'insert-profile-image',
+                'insert-registration-document'
             ]);
 
             $this->command->info('Permissions assigned to freeDriver role successfully.');
         } else {
-            $this->command->error('Role "freeDriver" not found. Please ensure it exists.');
+            $this->command->error('Role "freeDriver" not found. Please ensure it is exists.');
         }
 
 
         // Assign permissions for employee-driver Role
         if ($employeeDriver) {
             $employeeDriver->syncPermissions([
-                'insert_profile_image',
-                'insert_registration_document'
+                'insert-profile-image',
+                'insert-registration-document'
             ]);
 
             $this->command->info('Permissions assigned to employeeDriver role successfully.');
         } else {
-            $this->command->error('Role "employeeDriver" not found. Please ensure it exists.');
+            $this->command->error('Role "employeeDriver" not found. Please ensure it is exists.');
         }
     }
 }

@@ -21,7 +21,8 @@ return new class extends Migration {
             $table->enum('gender', ['male', 'female'])->default('male');
             $table->string('deviceToken')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->float('rate', 2, 1)->default(0.0);
+            $table->boolean('full_registered')->default(true);
+            $table->boolean('can_create_office')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -12,10 +12,10 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->constrained('cars')->cascadeOnDelete()->nullable();
+            $table->foreignId('car_id')->nullable()->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
-            $table->foreignId('wedding_category_id')->constrained('wedding_categories')->cascadeOnDelete()->nullable();
+            $table->foreignId('wedding_category_id')->nullable()->constrained('wedding_categories')->cascadeOnDelete();
             $table->float('price');
             $table->integer('number_of_seats')->default(4);
             $table->boolean('female_driver')->default(false);
