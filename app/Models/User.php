@@ -42,9 +42,8 @@ class User extends Authenticatable
 
     protected $appends = [
         'image_url',
+
         'rate'
-
-
     ];
 
     /**
@@ -142,6 +141,7 @@ class User extends Authenticatable
         }
         return null;
     }
+
 
 
     public function getRateAttribute()

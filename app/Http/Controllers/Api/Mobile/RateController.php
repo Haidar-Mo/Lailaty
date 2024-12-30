@@ -11,6 +11,8 @@ use App\Models\{
     User,
     Vehicle
 };
+
+
 use Illuminate\Support\Facades\{
     Auth,
     DB
@@ -41,7 +43,10 @@ class RateController extends Controller
 
     public function RateCar(RateRequest $request, $id)
     {
+
         $car = Vehicle::find($id);
+
+
            return  DB::transaction(function () use ($request,$car) {
                 $this->rateService->RateCarService($car,$request);
                 return $this->sudResponse('! تم ارسال التقيم بنجاح ');

@@ -6,6 +6,7 @@ use App\Models\{
     User,
     Vehicle
 };
+
 use Exception;
 use Illuminate\Support\Facades\{
     Auth,
