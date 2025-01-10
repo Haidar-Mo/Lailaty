@@ -4,12 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -30,6 +28,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'gender',
+        'birth_date',
         'deviceToken',
         'is_active',
         'full_registered',
@@ -65,6 +64,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'birth_date' => 'date',
         'verification_code_expires_at' => 'datetime',
         'password' => 'hashed',
 
@@ -86,6 +86,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Office::class);
     }
+
     public function vehicle(): HasMany
     {
         return $this->hasMany(Vehicle::class);
@@ -96,9 +97,14 @@ class User extends Authenticatable
         return $this->hasOne(Vehicle::class, 'driver_id');
     }
 
-    public function drivingRequest(): HasMany
+    public function workRequest(): HasMany
     {
-        return $this->hasMany(UserCarDrivingRequest::class);
+        return $this->hasMany(VehicleWorkRequest::class);
+    }
+
+    public function receivedWorkRequest(): HasMany
+    {
+        return $this->hasMany(VehicleWorkRequest::class, 'receiver_user_id');
     }
     public function image(): MorphOne
     {

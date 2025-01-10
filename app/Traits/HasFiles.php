@@ -1,12 +1,7 @@
 <?php
 
 namespace App\Traits;
-
-use File;
-use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
-use Log;
 
 
 /**
@@ -14,27 +9,7 @@ use Log;
  */
 trait HasFiles
 {
-    // public function setFileName(array $images, string $folder_name): array
-    // {
-    //     return array_map(function ($image) use ($folder_name) {
-    //         return $folder_name . '/' . uniqid() . '_' . substr(
-    //             str_shuffle(
-    //                 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_',
-    //             ),
-    //             0,
-    //             50
-    //         ) . '.' . $image->getClientOriginalExtension();
-    //     }, $images);
-    // }
-
-    // public function saveFile1(array $images, array $names, string $path)
-    // {
-    //     for ($i = 0; $i < count($images); $i++) {
-    //         $images[$i]->storeAs($path, $names[$i]);
-
-    //     }
-    // }
-
+    
     public function saveFile(UploadedFile $file, string $folder_name)
     {
         $file_name = "$folder_name/" . time() . '_' . substr(

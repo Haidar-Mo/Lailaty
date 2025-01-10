@@ -10,10 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('car_services', function (Blueprint $table) {
+        Schema::create('vehicle_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->constrained('vehicles')->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
+            $table->boolean('is_activated')->default(true);
             $table->float('price')->nullable();
             $table->boolean('with_notification')->default(false);
             $table->timestamps();

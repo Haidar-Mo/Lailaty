@@ -43,6 +43,9 @@ class ServicesSeeder extends Seeder
                 'name' => 'زفاف',
             ],
             [
+                'name' => 'سفر'
+            ],
+            [
                 'name' => 'داخلي'
             ],
             [
@@ -53,12 +56,6 @@ class ServicesSeeder extends Seeder
             ],
             [
                 'name' => 'تعليم قيادة'
-            ],
-            [
-                'name' => 'ليكجري'
-            ],
-            [
-                'name' => 'سفر'
             ],
 
         ];

@@ -3,15 +3,9 @@
 namespace App\Services\Mobile;
 
 use App\Traits\HasFiles;
+use Illuminate\Support\Facades\DB;
 use Exception;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
-use Illuminate\Support\Facades\{
-    Auth,
-    DB
-};
+
 class RegistrationDocuments
 {
     use HasFiles;
