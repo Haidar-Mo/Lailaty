@@ -30,20 +30,19 @@ class VehicleServiceRegisterController extends Controller
         try {
             $vehicle = Vehicle::findOrFail($id);
 
-            if ($vehicle->vehicleType === 'motorcyle')
+            if ($vehicle->vehicle_type === 'motorcycle')
                 $vehicle = $this->service->registerServiceForMotorcycle($vehicle);
             else {
                 $data = $request->validate([
-                    'زفاف' => 'boolean',
-                    'داخلي' => 'boolean',
-                    'سفر' => 'boolean',
-                    'price' => 'nullable',
-                    'تعليم قيادة' => 'boolean',
-                    'شحن' => 'boolean',
+                    'wedding' => 'boolean',
+                    'wedding_category_id' => 'nullable',
+                    'taxi' => 'boolean',
+                    'travel' => 'boolean',
+                    'drive_lessons' => 'boolean',
+                    'shipping' => 'boolean',
                 ]);
-                $vehicle = $this->service->registerService($vehicle, $data);
+                $vehicle = $this->service->registerServiceForCar($vehicle, $data);
             }
-
             return $this->indexOrShowResponse('vehicle', $vehicle, 201);
         } catch (Exception $e) {
             return $this->sudResponse('error: ' . $e->getMessage(), 500);

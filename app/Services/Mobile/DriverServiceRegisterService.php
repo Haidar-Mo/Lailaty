@@ -17,7 +17,7 @@ class DriverServiceRegisterService
         DB::beginTransaction();
         try {
             $service = Service::where('name', 'داخلي')->firstOrFail();
-            $vehicle->service->create([
+            $vehicle->service()->create([
                 'service_id' => $service->id,
                 'is_activated' => true
             ]);
@@ -34,7 +34,7 @@ class DriverServiceRegisterService
     }
 
 
-    public function registerService($vehicle, $data)
+    public function registerServiceForCar($vehicle, $data)
     {
         DB::beginTransaction();
         try {
@@ -45,8 +45,9 @@ class DriverServiceRegisterService
                 $registerd_service->vehicle_id = $vehicle->id;
                 $registerd_service->service_id = $service->id;
                 $registerd_service->is_activated = $value;
-                if ($key === 'زفاف') {
-                    $registerd_service->price = $data->price;
+                if ($key === 'wedding' && $value == true) {
+                    $vehicle->wedding_category_id = $data->wedding_category_id;
+                    $vehicle->save();
                 }
                 $registerd_service->save();
             }

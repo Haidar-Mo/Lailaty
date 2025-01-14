@@ -25,7 +25,7 @@ class VehicleCreateRequest extends FormRequest
         $vehicleType = $this->route('vehicleType');
 
         return
-            $rules = match ($vehicleType) {
+             match ($vehicleType) {
                 'car' => [
                     'vehicle_type' => $vehicleType,
                     'license_plate' => 'required|string',
@@ -36,7 +36,6 @@ class VehicleCreateRequest extends FormRequest
                     'is_modified' => 'required',
                     'original_car_brand_id' => 'nullable',
                     'more_the_four_seats' => 'boolean',
-                    'wedding_category_id' => 'string',
                     'image_1' => 'required|image',
                     'image_2' => 'required|image',
                     'image_3' => 'required|image',

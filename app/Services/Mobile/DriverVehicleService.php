@@ -52,7 +52,7 @@ class DriverVehicleService
 
         } catch (Exception $e) {
             DB::rollback();
-            throw new Exception("Something went wrong while uploading the image: " . $e->getMessage(), 500);
+            throw new Exception("Something went wrong : " . $e->getMessage(), 500);
         }
     }
 

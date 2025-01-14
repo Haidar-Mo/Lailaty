@@ -16,11 +16,14 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->foreignId('wedding_category_id')->nullable()->constrained('wedding_categories')->cascadeOnDelete();
+            $table->string('source_latitude');
+            $table->string('source_longitude');
             $table->float('price');
             $table->integer('number_of_seats')->default(4);
             $table->boolean('female_driver')->default(false);
             $table->text('note')->nullable();
             $table->enum('type',['private','shared'])->default('private');
+            $table->boolean('auto_accept')->default(0);
             $table->enum('status', ['pending', 'accepted', 'cancelled'])->default('pending');
             $table->text('cancel_reson')->nullable();
             $table->timestamps();

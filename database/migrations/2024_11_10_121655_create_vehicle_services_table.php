@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->boolean('is_activated')->default(true);
-            $table->float('price')->nullable();
+          //  $table->float('price')->nullable();
             $table->boolean('with_notification')->default(false);
             $table->timestamps();
         });

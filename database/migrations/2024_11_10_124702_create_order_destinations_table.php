@@ -10,11 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('order_locations', function (Blueprint $table) {
+        Schema::create('order_destinations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
-            $table->string('source_latitude');
-            $table->string('source_longitude');
             $table->string('destination_latitude');
             $table->string('destination_longitude');
             $table->timestamps();
@@ -26,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_locations');
+        Schema::dropIfExists('order_destinations');
     }
 };

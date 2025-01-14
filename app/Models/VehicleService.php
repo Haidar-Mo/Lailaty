@@ -14,9 +14,14 @@ class VehicleService extends Model
         'vehicle_id',
         'service_id',
         'is_activated',
-        'price',
+        //'price',
         'with_notification'
     ];
+
+    protected $appends = [
+        'service_name',
+    ];
+
 
     public function vehicle(): BelongsTo
     {
@@ -26,5 +31,13 @@ class VehicleService extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+
+    /** Accessories */
+
+    public function getServiceNameAttribute()
+    {
+        return $this->service()->first()->name;
     }
 }

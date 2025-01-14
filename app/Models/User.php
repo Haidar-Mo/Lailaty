@@ -149,9 +149,9 @@ class User extends Authenticatable
 
     public function getRateAttribute()
     {
-        $count = $this->rate()->count();
+        $count = $this->rated()->count();
         if ($count > 0)
-            return $rate = $this->rate()->sum('rate') / $count;
+            return $this->rated()->sum('rate') / $count;
         else {
             return 0;
         }

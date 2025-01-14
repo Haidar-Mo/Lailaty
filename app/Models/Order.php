@@ -22,7 +22,9 @@ class Order extends Model
         'note',
         'type',
         'status',
-        'cancel_rason'
+        'cancel_rason',
+        'source_latitude',
+        'source_longitude',
     ];
 
 
@@ -41,9 +43,9 @@ class Order extends Model
         return $this->belongsTo(Service::class);
     }
 
-    public function location(): HasMany
+    public function destination(): HasMany
     {
-        return $this->hanMany(OrderLocation::class);
+        return $this->hasMany(OrderDestination::class);
     }
 
     public function duration(): HasOne

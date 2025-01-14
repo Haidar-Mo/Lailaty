@@ -14,17 +14,17 @@ class CarBrandSeed extends Seeder
     public function run(): void
     {
 
-        $brands=[
+        $brands = [
             [
-                'name'=>'مرسيدس',
-        ],
-        [
-            'name'=>'كيا'
-        ],
+                'name' => 'مرسيدس',
+            ],
+            [
+                'name' => 'كيا'
+            ],
 
 
         ];
-        foreach($brands as $brand){
+        foreach ($brands as $brand) {
             CarBrand::create($brand);
         }
     }

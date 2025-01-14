@@ -40,22 +40,22 @@ class ServicesSeeder extends Seeder
        );*/
         $services = [
             [
-                'name' => 'زفاف',
+                'name' => 'wedding',
             ],
             [
-                'name' => 'سفر'
+                'name' => 'travel'
             ],
             [
-                'name' => 'داخلي'
+                'name' => 'taxi'
             ],
             [
-                'name' => 'على مودك'
+                'name' => 'mood'
             ],
             [
-                'name' => 'شحن'
+                'name' => 'shipping'
             ],
             [
-                'name' => 'تعليم قيادة'
+                'name' => 'drive_lessons'
             ],
 
         ];

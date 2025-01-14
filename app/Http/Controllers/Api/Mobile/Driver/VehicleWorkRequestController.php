@@ -58,6 +58,7 @@ class VehicleWorkRequestController extends Controller
         }
     }
 
+    
     /**
      * Delte the authanticated user's specified request before it get accepted or rejected
      * @param string $id
@@ -79,7 +80,6 @@ class VehicleWorkRequestController extends Controller
     }
 
 
-
     /**
      * Display list of authanticated user's vehicle's requests
      * @return \Illuminate\Database\Eloquent\Collection
@@ -90,6 +90,7 @@ class VehicleWorkRequestController extends Controller
             ->receivedWorkRequest()->with('vehicle')
             ->get();
     }
+
 
     /**
      * Show the specified request
@@ -102,6 +103,11 @@ class VehicleWorkRequestController extends Controller
     }
 
 
+    /**
+     * Approve the specified work request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function approve(string $id)
     {
         try {
@@ -114,8 +120,9 @@ class VehicleWorkRequestController extends Controller
         }
     }
 
+
     /**
-     * Reject the specified request
+     * Reject the specified work request
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
      */
