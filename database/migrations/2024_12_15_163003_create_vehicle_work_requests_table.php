@@ -10,10 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user_car_driving_requests', function (Blueprint $table) {
+        Schema::create('vehicle_work_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('car_id')->constrained('vehicles')->cascadeOnDelete();
+            $table->foreignId('receiver_user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
@@ -24,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_car_driving_requests');
+        Schema::dropIfExists('vehicle_work_requests');
     }
 };

@@ -28,29 +28,9 @@ class OfficeDocument extends Model
 
 
     /** Accessories */
-    
-   /* public function getTaxCardAttribute($value)
-    {
-        return $value ? url('storage/' . $value) : null;
-    }
 
-    public function getCommercialRegistrationCardAttribute($value)
-    {
-        return $value ? url('storage/' . $value) : null;
-    }
-
-    public function getInsuranceCardAttribute($value)
-    {
-        return $value ? url('storage/' . $value) : null;
-    }
-
-    public function getValueAddedTaxCardAttribute($value)
-    {
-        return $value ? url('storage/' . $value) : null;
-    }
-
-    public function getAttachedDocumentAttribute($value)
-    {
-        return $value ? url('storage/' . $value) : null;
-    }*/
+    /* public function getTaxCardAttribute($value)
+     {
+         return $value ? url('storage/' . $value) : null;
+     }*/
 }

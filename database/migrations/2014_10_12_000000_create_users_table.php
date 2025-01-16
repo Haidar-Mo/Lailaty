@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('last_name')->nullable();
             $table->enum('gender', ['male', 'female'])->default('male');
             $table->string('deviceToken')->nullable();
+            $table->string('birth_date');
             $table->boolean('is_active')->default(true);
             $table->boolean('full_registered')->default(true);
             $table->boolean('can_create_office')->default(false);

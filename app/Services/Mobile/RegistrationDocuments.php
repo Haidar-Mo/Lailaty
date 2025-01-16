@@ -3,19 +3,20 @@
 namespace App\Services\Mobile;
 
 use App\Traits\HasFiles;
+use Illuminate\Support\Facades\DB;
 use Exception;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
-use Illuminate\Support\Facades\{
-    Auth,
-    DB
-};
+
 class RegistrationDocuments
 {
     use HasFiles;
 
+    /**
+     * Summary of DocumentsRegistration
+     * @param mixed $document
+     * @param mixed $user
+     * @throws \Exception
+     * @return void
+     */
     public function DocumentsRegistration($document, $user)
     {
         $uploadedPaths = [];
@@ -30,7 +31,7 @@ class RegistrationDocuments
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => $e->getMessage()], 500);
+            throw new Exception('error:' . $e->getMessage(), 500);
         }
     }
 
@@ -58,8 +59,10 @@ class RegistrationDocuments
                     $this->deleteFile($file);
             }
             DB::commit();
+
         } catch (Exception $e) {
             DB::rollBack();
+            throw new Exception('error: ' . $e->getMessage(), 500);
         }
     }
 

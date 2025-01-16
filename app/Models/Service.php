@@ -15,9 +15,9 @@ class Service extends Model
     ];
 
 
-    public function carService(): HasMany
+    public function vehicle(): HasMany
     {
-        return $this->hasMany(CarService::class);
+        return $this->hasMany(VehicleService::class);
     }
 
     public function order(): HasMany

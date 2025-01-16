@@ -13,57 +13,44 @@ class ServicesSeeder extends Seeder
      */
     public function run(): void
     {
-        /*Service::insert(
-           [
-               [
-                   'name' => 'in_city'
-               ],
-               [
-                   'name' => 'luxury'
-               ],
-               [
-                   'name' => 'across_cities'
-               ],
-               [
-                   'name' => 'wedding'
-               ],
-               [
-                   'name' => 'your_mood'
-               ],
-               [
-                   'name' => 'driving_teaching'
-               ],
-               [
-                   'name' => 'shipping'
-               ],
-           ]
-       );*/
-        $services = [
+        Service::insert(
             [
-                'name' => 'زفاف',
-            ],
-            [
-                'name' => 'داخلي'
-            ],
-            [
-                'name' => 'على مودك'
-            ],
-            [
-                'name' => 'شحن'
-            ],
-            [
-                'name' => 'تعليم قيادة'
-            ],
-            [
-                'name' => 'ليكجري'
-            ],
-            [
-                'name' => 'سفر'
-            ],
-
-        ];
-        foreach ($services as $service) {
-            Service::create($service);
-        }
+                [
+                    'name' => 'wedding',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'luxury',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'travel',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'taxi',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'mood',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'shipping',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'drive_lessons',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]
+        );
     }
 }

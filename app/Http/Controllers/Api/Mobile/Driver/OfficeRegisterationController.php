@@ -19,13 +19,23 @@ class OfficeRegisterationController extends Controller
 
     }
 
+    /**
+     * Show the authenticated user's offic
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show()
     {
         $user = Auth::user();
-        $office = $user->office()->with('document')->first();
+        $office = $user->office()->with('document')->firstOrFail();
         return $this->indexOrShowResponse("office", $office, 200);
     }
 
+    
+    /**
+     * Create a new office for the authenticated user
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -53,6 +63,12 @@ class OfficeRegisterationController extends Controller
         }
     }
 
+
+    /**
+     * Store the documents for a previously created office for the authenticated user
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function storeOfficeDocument(Request $request)
     {
         $request->validate([
@@ -77,6 +93,12 @@ class OfficeRegisterationController extends Controller
 
     }
 
+
+    /**
+     * Update the office documents for authenticated user
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateOfficeDocument(Request $request)
     {
         $request->validate([

@@ -2,6 +2,8 @@
 
 use App\Enums\TokenAbility;
 use App\Http\Controllers\Api\Mobile\Driver\VehicleController;
+use App\Http\Controllers\Api\Mobile\Driver\VehicleServiceRegisterController;
+use App\Http\Controllers\Api\Mobile\Driver\VehicleWorkRequestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\Driver\OfficeRegisterationController;
 
@@ -33,10 +35,31 @@ Route::prefix('captain/')
             ->group(function () {
 
                 Route::get('index', [VehicleController::class, 'index']);
-                Route::get('show', [VehicleController::class, 'show']);
+                Route::get('show/{id}', [VehicleController::class, 'show']);
                 Route::post('create/{vehicleType}', [VehicleController::class, 'store']);
+                Route::post('update/{vehicleType}/{id}', [VehicleController::class, 'update']);
+                Route::post('update/{vehicleId}/image/{imageId}', [VehicleController::class, 'updateImage']);
+                Route::post('update/{id}/document/ownership', [VehicleController::class, 'updateOwnershipDocument']);
 
-                
+            });
+
+        Route::prefix('services/')
+            //->middleware()
+            ->group(function () {
+
+                Route::post('register/{id}',[VehicleServiceRegisterController::class,'store']);
+
+            });
+
+
+            Route::prefix('works/')
+            //->middleware('')
+            ->group(function () {
+
+                Route::get('fleet-owner/index', [VehicleWorkRequestController::class, 'indexFleetOwner']);
+                Route::get('fleet-owner/{id}/vehicle/index', [VehicleWorkRequestController::class, 'indexAvailableVehicle']);
+
+                Route::post('request/create/{id}', [VehicleWorkRequestController::class, 'create']);
             });
 
 

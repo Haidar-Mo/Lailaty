@@ -16,13 +16,17 @@ class Order extends Model
         'car_id',
         'user_id',
         'service_id',
-        'price',
-        'number_of_seats',
         'female_driver',
-        'note',
+        'source_latitude',
+        'source_longitude',
+        'date',
+        'time',
+        'price',
         'type',
+        'number_of_seats',
+        'note',
         'status',
-        'cancel_rason'
+        'cancel_rason',
     ];
 
 
@@ -41,9 +45,9 @@ class Order extends Model
         return $this->belongsTo(Service::class);
     }
 
-    public function location(): HasMany
+    public function destination(): HasMany
     {
-        return $this->hanMany(OrderLocation::class);
+        return $this->hasMany(OrderDestination::class);
     }
 
     public function duration(): HasOne

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'ماريو',
             'last_name' => 'اندراوس',
             'gender' => 'male',
+            'birth_date' => '2000/01/01',
             'deviceToken' => 'some_random_device_token',
             'is_active' => true,
             'email_verified_at' => now(),
@@ -34,13 +35,13 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'mohammad',
             'last_name' => 'haidar',
             'gender' => 'male',
+            'birth_date' => '2000/01/01',
             'deviceToken' => 'QWERTYUIOPASDFGHJKLZXCVBNM',
             'is_active' => true,
             'email_verified_at' => now(),
         ]);
 
-
-
+      
         $this->call(RolesSeeder::class);
 
         $this->call(PermissionSeeder::class);
