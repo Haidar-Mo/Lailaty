@@ -16,15 +16,17 @@ class Order extends Model
         'car_id',
         'user_id',
         'service_id',
-        'price',
-        'number_of_seats',
         'female_driver',
-        'note',
-        'type',
-        'status',
-        'cancel_rason',
         'source_latitude',
         'source_longitude',
+        'date',
+        'time',
+        'price',
+        'type',
+        'number_of_seats',
+        'note',
+        'status',
+        'cancel_rason',
     ];
 
 

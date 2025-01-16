@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Services\Transportation;
+namespace App\Services\Mobile\Transportation;
 
 use App\Models\Service;
-use DB;
-use Exception;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Database;
+use Exception;
+use DB;
 
 /**
  * Class TransportTaxiService.
  */
-class TransportTaxiService implements TransportInterface
+class TransportTaxiService implements InterfaceTransport
 {
-
 
     private Database $firebaseDatabase;
 
@@ -80,12 +79,4 @@ class TransportTaxiService implements TransportInterface
         }
     }
 
-
-
-    public function acceptOrder()
-    {
-    }
-    public function getPrice()
-    {
-    }
 }

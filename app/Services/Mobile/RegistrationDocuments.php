@@ -10,6 +10,13 @@ class RegistrationDocuments
 {
     use HasFiles;
 
+    /**
+     * Summary of DocumentsRegistration
+     * @param mixed $document
+     * @param mixed $user
+     * @throws \Exception
+     * @return void
+     */
     public function DocumentsRegistration($document, $user)
     {
         $uploadedPaths = [];
@@ -24,7 +31,7 @@ class RegistrationDocuments
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => $e->getMessage()], 500);
+            throw new Exception('error:' . $e->getMessage(), 500);
         }
     }
 
@@ -52,8 +59,10 @@ class RegistrationDocuments
                     $this->deleteFile($file);
             }
             DB::commit();
+
         } catch (Exception $e) {
             DB::rollBack();
+            throw new Exception('error: ' . $e->getMessage(), 500);
         }
     }
 

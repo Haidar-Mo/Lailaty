@@ -12,19 +12,21 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->nullable()->constrained('vehicles')->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->nullable()->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->foreignId('wedding_category_id')->nullable()->constrained('wedding_categories')->cascadeOnDelete();
+            $table->boolean('female_driver')->default(false);
             $table->string('source_latitude');
             $table->string('source_longitude');
-            $table->float('price');
+            $table->date('date')->default(date('Y-m-d'));
+            $table->time('time')->default(time());
             $table->integer('number_of_seats')->default(4);
-            $table->boolean('female_driver')->default(false);
+            $table->float('price');
             $table->text('note')->nullable();
-            $table->enum('type',['private','shared'])->default('private');
+            $table->enum('type', ['private', 'shared'])->default('private');
             $table->boolean('auto_accept')->default(0);
-            $table->enum('status', ['pending', 'accepted', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'cancelled', 'ended'])->default('pending');
             $table->text('cancel_reson')->nullable();
             $table->timestamps();
         });

@@ -39,6 +39,7 @@ class Vehicle extends Model
         'wedding_category',
         'image',
         'ownership_document',
+        'order_count',
         'rate',
     ];
 
@@ -108,6 +109,20 @@ class Vehicle extends Model
 
     /** Accessories */
 
+    /**
+     * Check if the vehicle have the luxury service or not
+     * @return bool
+     */
+    public function isComfortable()
+    {
+        $luxury = Service::where('name', 'luxury')->first();
+        return $this->service()->where('service_id', $luxury->id)->first() ? true : false;
+    }
+
+
+    
+    /** Attributes */
+
     public function getCarBrandAttribute()
     {
         if ($this->carBrand()->first() != null)
@@ -135,13 +150,15 @@ class Vehicle extends Model
         return $this->ownershipDocument()->first();
     }
 
+    public function getOrderCountAttribute()
+    {
+        $count = $this->order()->where('status', 'ended')->get()->count();
+        return $count > 0 ? $count : 0;
+    }
     public function getRateAttribute()
     {
         $count = $this->rated()->count();
-        if ($count > 0)
-            return $this->rate()->sum('rate') / $count;
-        else {
-            return 0;
-        }
+        return $count > 0 ? $this->rate()->sum('rate') / $count : 0;
     }
+
 }
