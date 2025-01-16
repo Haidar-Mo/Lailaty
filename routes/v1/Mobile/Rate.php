@@ -2,7 +2,6 @@
 
 use App\Enums\TokenAbility;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Mobile\ReportsController;
 use App\Http\Controllers\Api\Mobile\RateController;
 
 Route::prefix('Mobile')
@@ -11,9 +10,8 @@ Route::prefix('Mobile')
         'ability:' . TokenAbility::ACCESS_API->value
     ])
     ->group(function () {
-
-        Route::apiResource('reports',ReportsController::class);
-        
-
+        Route::middleware(['role:freeDriver|employeeDriver'])
+        ->post('rate/client/{id}',[RateController::class,'RateClient']);
+        Route::post('rate/car/{id}',[RateController::class,'RateCar']);
 
     });

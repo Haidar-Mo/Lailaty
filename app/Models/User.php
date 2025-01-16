@@ -32,7 +32,7 @@ class User extends Authenticatable
         'deviceToken',
         'is_active',
         'full_registered',
-        'rate',
+       // 'rate',
         'office_id',
         'email_verified_at',
         'verification_code',
@@ -41,6 +41,7 @@ class User extends Authenticatable
 
     protected $appends = [
         'image_url',
+
         'rate'
     ];
 
@@ -126,7 +127,7 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
-    public function rate(): HasMany
+     public function rate(): HasMany
     {
         return $this->hasMany(Rate::class);
     }
@@ -147,6 +148,8 @@ class User extends Authenticatable
         return null;
     }
 
+
+
     public function getRateAttribute()
     {
         $count = $this->rated()->count();
@@ -156,4 +159,5 @@ class User extends Authenticatable
             return 0;
         }
     }
+
 }
