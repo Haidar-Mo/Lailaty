@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
  */
 class TransportContext
 {
-    private InterfaceTransport $transportType;
 
-    public function __construct(InterfaceTransport $transportType)
+    public function __construct(private InterfaceTransport $transportType)
     {
-        $this->transportType = $transportType;
     }
 
     public function orderTransportService(Request $request)
@@ -21,5 +19,14 @@ class TransportContext
         return $this->transportType->orderTransportService($request);
     }
 
-    
+    public function updateOrder(Request $request, string $id)
+    {
+        return $this->transportType->updateOrder($request, $id);
+
+    }
+
+    public function acceptTransportOrder(Request $request, string $id)
+    {
+        return $this->transportType->acceptTransportOrder($request, $id);
+    }
 }

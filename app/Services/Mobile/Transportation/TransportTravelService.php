@@ -52,5 +52,14 @@ class TransportTravelService implements InterfaceTransport
         }
     }
 
+    public function updateOrder(Request $request, string $id)
+    {
+    }
+
+
+
+    public function acceptTransportOrder(Request $request, string $id)
+    {
+    }
 
 }

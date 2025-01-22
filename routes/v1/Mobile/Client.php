@@ -18,6 +18,7 @@ Route::prefix('client/')
             ->group(function () {
 
                 Route::post('order/{serviceType}', [TransportationController::class, 'orderService']);
+                Route::post('update/{serviceType}/{id}', [TransportationController::class, 'updateOrder']);
             });
 
     });

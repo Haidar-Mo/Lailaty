@@ -8,7 +8,7 @@ use Kreait\Firebase\Database;
 /**
  * Class TransportShippingService.
  */
-class TransportShippingService
+class TransportShippingService implements InterfaceTransport
 {
     private Database $firebaseDatabase;
 
@@ -17,5 +17,16 @@ class TransportShippingService
         $this->firebaseDatabase = $firebaseDatabase;
     }
 
-    public function orderTransportService(Request $request){}
+    public function orderTransportService(Request $request)
+    {
+    }
+
+    public function updateOrder(Request $request, string $id)
+    {
+    }
+
+    public function acceptTransportOrder(Request $request, string $id)
+    {
+    }
+
 }

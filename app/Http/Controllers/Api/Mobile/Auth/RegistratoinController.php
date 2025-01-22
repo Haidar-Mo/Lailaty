@@ -46,7 +46,7 @@ class RegistratoinController extends Controller
             return response()->json(['message' => 'Email registration done. Verification email sent.'], 200);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['messge' => 'something goes wrong...'], 500);
+            return response()->json(['messge' => "Error: ".$e->getMessage()], 500);
         }
     }
 

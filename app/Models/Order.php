@@ -23,10 +23,12 @@ class Order extends Model
         'time',
         'price',
         'type',
-        'number_of_seats',
         'note',
-        'status',
+        'status', //* 'pending' 'accepted' 'cancelled' 'ended'
+        'number_of_seats',
+        'auto_accept',
         'cancel_rason',
+        'reference_key',
     ];
 
 
