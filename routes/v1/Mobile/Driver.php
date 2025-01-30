@@ -70,5 +70,6 @@ Route::prefix('captain/')
             ->group(function () {
 
                 Route::post('accept/{serviceType}/{id}', [TransportationController::class, 'acceptOrder']);
+                Route::post('cancel/{serviceType}/{id}', [TransportationController::class, 'cancelOrder']);
             });
     });

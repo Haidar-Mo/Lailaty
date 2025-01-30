@@ -32,7 +32,7 @@ class User extends Authenticatable
         'deviceToken',
         'is_active',
         'full_registered',
-        //'creat_captin_date',
+        //'create_capitan_date',
         'rate',
         'office_id',
         'email_verified_at',
@@ -42,7 +42,6 @@ class User extends Authenticatable
 
     protected $appends = [
         'image_url',
-
         'rate'
     ];
 

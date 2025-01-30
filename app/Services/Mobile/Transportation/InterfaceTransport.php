@@ -3,6 +3,7 @@
 namespace App\Services\Mobile\Transportation;
 
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 /**
@@ -10,12 +11,17 @@ use Illuminate\Http\Request;
  */
 interface InterfaceTransport
 {
-    //! Client Section
-    public function orderTransportService(Request $request); // For the client to order
+    //: Client Section
+    public function orderTransportService(Request $request); //* Order new Transport service
 
-    public function updateOrder(Request $request, string $id);
+    public function updateOrder(Request $request, string $id); //* Update order price
+
+    public function cancelOrder(string $id, Request $request); //* Cancel the order
 
 
-    //! Driver section
-    public function acceptTransportOrder(Request $request, string $id); //For Driver to accept order
+    //: Driver section
+    public function acceptTransportOrder(Request $request, string $id); //* accept order => give an offer or direct accept
+
+    public function cancelTransportOrder(Request $request, string $id);
+
 }

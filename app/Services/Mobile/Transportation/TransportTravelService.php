@@ -56,10 +56,15 @@ class TransportTravelService implements InterfaceTransport
     {
     }
 
+    public function cancelOrder(string $id, Request $request){}
 
+
+    
 
     public function acceptTransportOrder(Request $request, string $id)
     {
     }
+
+    public function cancelTransportOrder(Request $request, string $id){}
 
 }

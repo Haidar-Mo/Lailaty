@@ -21,7 +21,6 @@ class TransportTaxiService implements InterfaceTransport
 
     }
 
-
     //: Client section
 
     /**
@@ -126,9 +125,45 @@ class TransportTaxiService implements InterfaceTransport
     }
 
 
-    public function cancelOrder(string $id)
+    /**
+     * Cancel a Taxi Order
+     * @param string $id
+     * @param \Illuminate\Http\Request $request
+     * @throws \Exception
+     * @return string[]
+     */
+    public function cancelOrder(string $id, Request $request)
     {
-        //! do not forget to call it in interface and context first 
+        DB::beginTransaction();
+        try {
+            $order = auth()->user()->order()
+                ->where('id', $id)
+                ->whereNotIn('status', ['delivering', 'ended'])
+                ->first();
+
+            if (!$order)
+                throw new Exception('can not cancel this order...', 422);
+
+            $data = $request->validate([
+                'cancel_reason' => 'required',
+            ]);
+
+            $order->update([
+                'status' => 'canceled',
+                'cancel_reason' => $data['cancel_reason']
+            ]);
+
+            //do: send notification if there is an driver 
+
+            $this->deleteFirebaseOrder($order);
+            DB::commit();
+            return ['message' => 'Order canceled successfully!'];
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
     }
 
 
@@ -150,14 +185,14 @@ class TransportTaxiService implements InterfaceTransport
         DB::beginTransaction();
 
         try {
-            $order = Order::findOrFail($id);
+            $order = Order::find($id);
             $vehicle = auth()->user()->driveVehicle()->first();
-            if (!$vehicle)
-                throw new Exception('can not accept the order, no obtained car founded', 422);
 
-            // check if the order is already accepted
-            if ($order->status === "accepted")
-                return throw new Exception('order is already accepted...', 422);
+            if (!$vehicle || $order->vehicle_id != $vehicle->id)
+                throw new Exception('unauthenticated', 422);
+
+            if (!$order || $order->status != 'pending')
+                throw new Exception('error: can not accept this order....', 422);
 
             $request->validate([
                 'price' => 'required|numeric'
@@ -198,8 +233,116 @@ class TransportTaxiService implements InterfaceTransport
     }
 
 
+    /**
+     * Cancel a Taxi order
+     * @param \Illuminate\Http\Request $request
+     * @param string $id
+     * @throws \Exception
+     * @return string[]
+     */
+    public function cancelTransportOrder(Request $request, string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = Order::find($id);
+            $vehicle = auth()->user()->driveVehicle()->first();
+
+            if (!$vehicle || $order->vehicle_id != $vehicle->id)
+                throw new Exception('unauthenticated', 422);
+
+            if (!$order || $order->status->not_in(['pending', 'accepted']))
+                throw new Exception('can not cancel this order....', 422);
+
+            $data = $request->validate([
+                'cancel_reason' => 'required'
+            ]);
+
+            $order->update([
+                'status' => 'cancel',
+                'cancel_reason' => $data['cancel_reason']
+            ]);
+            $this->deleteFirebaseOrder($order);
+
+            //do: send notification to client
+            DB::commit();
+            return ['message' => 'order canceled successfully!'];
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
 
 
+    /**
+     * Start delivering the client
+     * @param string $id
+     * @throws \Exception
+     * @return string[]
+     */
+    public function startTransportOrder(string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = Order::find($id);
+            $vehicle = auth()->user()->driveVehicle()->first();
+
+            if (!$vehicle || $order->vehicle_id != $vehicle->id)
+                throw new Exception('unauthenticated', 422);
+
+            if (!$order || $order->status->not_in(['canceled', 'pending', 'delivering', 'ended']))
+                throw new Exception('can not start this order....', 422);
+
+            $order->update([
+                'status' => 'delivering',
+            ]);
+            $this->updateFirebaseOrder($order, ['status' => 'delivering']);
+
+            //do: send notification to client
+
+            DB::commit();
+            return ['message' => 'order started successfully!'];
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+
+    /**
+     * Finish delivering the client
+     * @param string $id
+     * @throws \Exception
+     * @return string[]
+     */
+    public function finishTransportOrder(string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = Order::find($id);
+            $vehicle = auth()->user()->driveVehicle()->first();
+
+            if (!$vehicle || $order->vehicle_id != $vehicle->id)
+                throw new Exception('unauthenticated', 422);
+
+            if (!$order || $order->status->not_in(['accepted', 'canceled', 'pending', 'ended']))
+                throw new Exception('can not finish this order....', 422);
+
+            $order->update([
+                'status' => 'ended',
+            ]);
+            $this->updateFirebaseOrder($order, ['status' => 'ended']);
+
+            //do: send notification to client
+
+            DB::commit();
+            return ['message' => 'order finished successfully!'];
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
 
 
 
@@ -241,7 +384,6 @@ class TransportTaxiService implements InterfaceTransport
     }
 
 
-
     //* Update firebase Order
     private function updateFirebaseOrder(Order $order, array $data)
     {
@@ -257,6 +399,21 @@ class TransportTaxiService implements InterfaceTransport
         }
     }
 
+
+    //* Delete firebase Order
+    private function deleteFirebaseOrder(Order $order)
+    {
+        try {
+
+            $node = $order->female_driver ? 'female_orders' : 'orders';
+            $this->firebaseDatabase
+                ->getReference("$node/{$order->reference_key}")
+                ->remove();
+
+        } catch (\Kreait\Firebase\Exception\DatabaseException $e) {
+            throw new Exception('Failed to cancel order: ' . $e->getMessage(), 500);
+        }
+    }
 
     //* update Firebase with offers
     private function updateFirebaseOffers(Order $order, $offer)

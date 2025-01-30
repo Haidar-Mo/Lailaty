@@ -70,4 +70,29 @@ class TransportationController extends Controller
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
+
+
+    public function cancelOrder(Request $request, string $serviceType, string $id)
+    {
+        try {
+            $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+            $response = $context->cancelOrder($id, $request);
+            return $this->indexOrShowResponse('data', $response, 200);
+
+        } catch (Exception $e) {
+
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
 }

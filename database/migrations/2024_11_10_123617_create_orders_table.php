@@ -26,8 +26,8 @@ return new class extends Migration {
             $table->text('note')->nullable();
             $table->enum('type', ['private', 'shared'])->default('private');
             $table->boolean('auto_accept')->default(0);
-            $table->enum('status', ['pending', 'accepted', 'cancelled', 'ended'])->default('pending');
-            $table->text('cancel_reson')->nullable();
+            $table->enum('status', ['pending', 'accepted', 'cancelled', 'delivering','ended'])->default('pending'); 
+            $table->text('cancel_reason')->nullable();
             $table->string('reference_key')->nullable();
             $table->timestamps();
         });

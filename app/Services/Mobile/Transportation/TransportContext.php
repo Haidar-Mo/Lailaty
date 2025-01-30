@@ -2,6 +2,7 @@
 
 namespace App\Services\Mobile\Transportation;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 /**
@@ -13,7 +14,7 @@ class TransportContext
     public function __construct(private InterfaceTransport $transportType)
     {
     }
-
+    //: Client section 
     public function orderTransportService(Request $request)
     {
         return $this->transportType->orderTransportService($request);
@@ -25,8 +26,21 @@ class TransportContext
 
     }
 
+    public function cancelOrder(string $id, Request $request)
+    {
+        return $this->transportType->cancelOrder($id, $request);
+    }
+
+
+    //: Driver section
     public function acceptTransportOrder(Request $request, string $id)
     {
         return $this->transportType->acceptTransportOrder($request, $id);
     }
+
+    public function cancelTransportOrder(Request $request, string $id)
+    {
+        return $this->transportType->cancelTransportOrder($request, $id);
+    }
+    
 }
