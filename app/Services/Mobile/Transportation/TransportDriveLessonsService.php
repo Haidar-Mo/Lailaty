@@ -19,4 +19,7 @@ class TransportDriveLessonsService implements InterfaceTransport
     }
 
     public function orderTransportService(Request $request){}
+
+    public function acceptTransportOrder(Request $request, string $id){}
+
 }

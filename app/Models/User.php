@@ -32,7 +32,8 @@ class User extends Authenticatable
         'deviceToken',
         'is_active',
         'full_registered',
-       // 'rate',
+        //'create_capitan_date',
+        'rate',
         'office_id',
         'email_verified_at',
         'verification_code',
@@ -41,7 +42,6 @@ class User extends Authenticatable
 
     protected $appends = [
         'image_url',
-
         'rate'
     ];
 
@@ -93,7 +93,7 @@ class User extends Authenticatable
         return $this->hasMany(Vehicle::class);
     }
 
-    public function driveVeicle(): HasOne
+    public function driveVehicle(): HasOne
     {
         return $this->hasOne(Vehicle::class, 'driver_id');
     }
@@ -153,11 +153,6 @@ class User extends Authenticatable
     public function getRateAttribute()
     {
         $count = $this->rated()->count();
-        if ($count > 0)
-            return $this->rated()->sum('rate') / $count;
-        else {
-            return 0;
-        }
+        return $count > 0 ? $this->rate()->sum('rate') / $count : 0;
     }
-
 }

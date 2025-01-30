@@ -12,10 +12,11 @@ class OrderOffer extends Model
 
     protected $fillable = [
         'user_id',
-        'car_id',
+        'vehicle_id',
         'order_id',
         'price',
-        'status'
+        'status',
+        'reference_key'
     ];
 
     public function user(): BelongsTo
