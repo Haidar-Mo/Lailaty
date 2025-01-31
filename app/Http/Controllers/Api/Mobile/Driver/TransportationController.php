@@ -41,8 +41,8 @@ class TransportationController extends Controller
 
             $context = new TransportContext($transportType);
 
-            $response = $context->acceptTransportOrder($request, $id);
-            return $this->indexOrShowResponse('data', $response, 201);
+            return $response = $context->acceptTransportOrder($request, $id);
+            //return $this->indexOrShowResponse('data', $response, 201);
         } catch (Exception $e) {
 
             return $this->sudResponse($e->getMessage(), $e->getCode());
@@ -50,5 +50,89 @@ class TransportationController extends Controller
 
 
     }
+
+    public function cancelTransportOrder(Request $request, string $serviceType, string $id)
+    {
+        try {
+
+            $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+           return $response = $context->cancelTransportOrder($request, $id);
+           // return $this->indexOrShowResponse('data', $response, 201);
+        } catch (Exception $e) {
+
+            return $this->sudResponse($e->getMessage(),500);
+        }
+
+
+    }
+
+
+    public function updateOrder(Request $request, string $serviceType, string $id)
+    {
+        try {
+
+            $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+           return $response = $context->updateOrder($request, $id);
+          //  return $this->indexOrShowResponse('data', $response, 201);
+        } catch (Exception $e) {
+
+            return $this->sudResponse($e->getMessage(), 500);
+        }
+
+
+    }
+
+
+    public function finishTransportOrder(string $serviceType, string $id)
+    {
+        try {
+
+            $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+           return $response = $context->finishTransportOrder( $id);
+          //  return $this->indexOrShowResponse('data', $response, 201);
+        } catch (Exception $e) {
+
+            return $this->sudResponse($e->getMessage(), 500);
+        }
+
+
+    }
+
+
+
+
 
 }

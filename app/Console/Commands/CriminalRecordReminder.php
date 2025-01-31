@@ -32,7 +32,7 @@ class CriminalRecordReminder extends Command
         foreach ($users as $user) {
             if ($user->registrationDocument) {
                 if (trim($user->registrationDocument->criminal_record) === '') {
-                    $Date = Carbon::parse($user->created_at)->addMonths(3)->format('Y-m-d');
+                    $Date = Carbon::parse($user->captain_registration_time)->addMonths(3)->format('Y-m-d');
                     event(new CriminalRecordEvent("يرجى ادخال الفيش الجنائي قبل تاريخ $Date",$user));
                 }
             }

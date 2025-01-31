@@ -18,10 +18,20 @@ Route::prefix('client/')
             ->group(function () {
 
                 Route::post('order/{serviceType}', [TransportationController::class, 'orderService']);
-                Route::post('update/{serviceType}/{id}', [TransportationController::class, 'updateOrder']);
-                Route::post('cancel/{serviceType}/{id}', [TransportationController::class, 'cancelOrder']);
 
-                
+                Route::post('cancel/order/{serviceType}/{id}', [TransportationController::class, 'cancelOrder']);
+
+                Route::post('accept/order/offer/{serviceType}/{id}', [TransportationController::class, 'acceptOrderOfferTransport']);
+                Route::get('order/{serviceType}', [TransportationController::class, 'getOrderOfferTransport']);
+
+                Route::post('update/order/offer/{serviceType}/{id}', [TransportationController::class, 'updateOrderOffer']);
+                Route::post('subscription/order/offer/{serviceType}/{id}', [TransportationController::class, 'subscriptionOrder']);
+                Route::post('cancel/order/offer/{serviceType}/{id}', [TransportationController::class, 'cancelOrderOffer']);
+
+
+
+
+
             });
 
     });

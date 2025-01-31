@@ -11,6 +11,15 @@ use Illuminate\Http\Request;
  */
 interface InterfaceTransport
 {
+
+    public function updateOrderOffer(Request $request,$id);
+    public function acceptOrderOfferTransport($id);
+    public function getOrderOfferTransport();
+    public function cancelOrderOffer(Request $request,string $id);
+    public function subscriptionOrder($id);
+    public function finishTransportOrder(string $id);
+
+
     //: Client Section
     public function orderTransportService(Request $request); //* Order new Transport service
 
@@ -23,5 +32,6 @@ interface InterfaceTransport
     public function acceptTransportOrder(Request $request, string $id); //* accept order => give an offer or direct accept
 
     public function cancelTransportOrder(Request $request, string $id);
+
 
 }
