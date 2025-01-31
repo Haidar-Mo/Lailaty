@@ -16,6 +16,7 @@ use App\Http\Requests\{
     UpdateDocuments
 
 };
+use Carbon\Carbon;
 use Illuminate\Support\Facades\{
     Auth,
     DB
@@ -27,7 +28,7 @@ class DocumentsRegisterController extends Controller
 
     public function __construct(protected RegistrationDocuments $registration)
     {
-        
+
     }
 
 
@@ -42,6 +43,8 @@ class DocumentsRegisterController extends Controller
             DB::transaction(function () use ($validatedData, $user) {
                 $this->registration->DocumentsRegistration($validatedData, $user);
             });
+            $user->captain_registration_time=Carbon::now();
+            $user->save();
             return $this->sudResponse("تم تسجيل الوثائق بنجاح !", 200);
         } catch (Exception $e) {
 

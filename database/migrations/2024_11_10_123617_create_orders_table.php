@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 return new class extends Migration {
     /**
@@ -19,8 +20,8 @@ return new class extends Migration {
             $table->boolean('female_driver')->default(false);
             $table->string('source_latitude');
             $table->string('source_longitude');
-            $table->date('date')->default(date('Y-m-d'));
-            $table->time('time')->default(time());
+            $table->date('date')->default(Carbon::now()->format('Y-m-d'));
+            $table->time('time')->default(Carbon::now()->format('H:i:s'));
             $table->integer('number_of_seats')->default(4);
             $table->float('price');
             $table->text('note')->nullable();

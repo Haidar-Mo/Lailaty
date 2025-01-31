@@ -52,7 +52,7 @@ class Vehicle extends Model
 
     public function driver(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'dreiver_id');
+        return $this->belongsTo(User::class, 'driver_id');
     }
 
     public function workRequest(): HasMany
@@ -97,7 +97,7 @@ class Vehicle extends Model
 
     public function offer(): HasMany
     {
-        return $this->hasMany(OrderOffer::class);
+        return $this->hasMany(OrderOffer::class,'vehicle_id');
     }
 
     public function rated(): MorphMany
@@ -120,7 +120,7 @@ class Vehicle extends Model
     }
 
 
-    
+
     /** Attributes */
 
     public function getCarBrandAttribute()
@@ -158,7 +158,7 @@ class Vehicle extends Model
     public function getRateAttribute()
     {
         $count = $this->rated()->count();
-        return $count > 0 ? $this->rate()->sum('rate') / $count : 0;
+        return $count > 0 ? $this->rated()->sum('rate') / $count : 0;
     }
 
 }

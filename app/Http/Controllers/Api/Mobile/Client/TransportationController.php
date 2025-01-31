@@ -15,7 +15,12 @@ use App\Traits\Responses;
 use Exception;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Database;
-
+use App\Models\{
+    OrderOffer,
+    Subscription,
+    Service,
+    Order
+};
 class TransportationController extends Controller
 {
     use Responses;
@@ -47,4 +52,105 @@ class TransportationController extends Controller
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
+
+    public function CancelOrderService(string $serviceType,$id)
+    {
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travle'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+            $orderResponse = $context->CancelOrderTransportService($id);
+            return 'done';
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+
+    public function acceptTransportOrder(string $serviceType,Request $request)
+    {
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travle'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+           return  $orderResponse = $context->acceptTransportOrder($request);
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function getOrderOfferTransport(string $serviceType)
+    {
+      
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travle'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+
+            return $orderResponse = $context->getOrderOfferTransport();
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+
+
+    public function acceptOrderOfferTransport(string $serviceType,$id)
+    {
+      
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travle'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+
+            return $orderResponse = $context->acceptOrderOfferTransport($id);
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function updateOrderOffer(string $serviceType,Request $request,$id)
+    {
+
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travle'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+
+            return $orderResponse = $context->updateOrderOffer($request,$id);
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+
 }

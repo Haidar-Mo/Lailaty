@@ -35,7 +35,7 @@ class CriminalRecord extends Command
 
             if ($user->registrationDocument) {
 
-                if (Carbon::parse($user->created_at)->addMonths(3)->isPast()) {
+                if (Carbon::parse($user->captain_registration_time)->addMonths(3)->isPast()) {
                     if (trim($user->registrationDocument->criminal_record) === '') {
                         $user->full_registered=false;
                         $user->save();

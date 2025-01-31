@@ -136,7 +136,11 @@ class User extends Authenticatable
     {
         return $this->morphMany(Rate::class, 'rateable');
     }
-
+    
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 
 
     /** Accessories */

@@ -13,7 +13,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'car_id',
+        'vehicle_id',
         'user_id',
         'service_id',
         'female_driver',
@@ -57,7 +57,12 @@ class Order extends Model
 
     public function offer(): HasMany
     {
-        return $this->hasMany(OrderOffer::class);
+        return $this->hasMany(OrderOffer::class,'order_id');
     }
+
+    public function subscriptions()
+       {
+           return $this->hasMany(Subscription::class);
+       }
 
 }
