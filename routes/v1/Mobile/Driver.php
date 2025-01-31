@@ -4,6 +4,7 @@ use App\Enums\TokenAbility;
 use App\Http\Controllers\Api\Mobile\Driver\VehicleController;
 use App\Http\Controllers\Api\Mobile\Driver\VehicleServiceRegisterController;
 use App\Http\Controllers\Api\Mobile\Driver\VehicleWorkRequestController;
+use App\Http\Controllers\Api\Mobile\Driver\TransportationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\Driver\OfficeRegisterationController;
 
@@ -47,12 +48,12 @@ Route::prefix('captain/')
             //->middleware()
             ->group(function () {
 
-                Route::post('register/{id}',[VehicleServiceRegisterController::class,'store']);
+                Route::post('register/{id}', [VehicleServiceRegisterController::class, 'store']);
 
             });
 
 
-            Route::prefix('works/')
+        Route::prefix('works/')
             //->middleware('')
             ->group(function () {
 
@@ -63,4 +64,15 @@ Route::prefix('captain/')
             });
 
 
+
+        Route::prefix('orders/')
+            //->middleware()
+            ->group(function () {
+
+                Route::post('accept/{serviceType}/{id}', [TransportationController::class, 'acceptOrder']);
+                Route::post('cancel/{serviceType}/{id}', [TransportationController::class, 'cancelTransportOrder']);
+                Route::post('update/order/offer/{serviceType}/{id}', [TransportationController::class, 'updateOrder']);
+                Route::post('end/order/{serviceType}/{id}', [TransportationController::class, 'finishTransportOrder']);
+
+            });
     });

@@ -15,7 +15,8 @@ class OrderOffer extends Model
         'vehicle_id',
         'order_id',
         'price',
-        'status'
+        'status',
+        'reference_key'
     ];
 
     public function user(): BelongsTo

@@ -27,6 +27,7 @@ class RegistrationDocuments
                 $fileName = $this->saveFile($file, "RegistirationDocuments");
                 $uploadedPaths[$key] = $fileName;
             }
+            //$user->update(['create_captin_date'=>now()]);
             $user->registrationDocument()->create($uploadedPaths);
             DB::commit();
         } catch (Exception $e) {

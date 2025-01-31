@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->float('price');
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+            $table->string('reference_key')->nullable();
             $table->timestamps();
         });
     }

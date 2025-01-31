@@ -11,24 +11,25 @@ use App\Services\Mobile\Transportation\TransportShippingService;
 use App\Services\Mobile\Transportation\TransportTaxiService;
 use App\Services\Mobile\Transportation\TransportTravelService;
 use App\Services\Mobile\Transportation\TransportWeddingService;
-use App\Traits\Responses;
-use Exception;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Database;
+
 use App\Models\{
     OrderOffer,
     Subscription,
     Service,
     Order
 };
+
+use App\Traits\Responses;
+use Exception;
+
 class TransportationController extends Controller
 {
     use Responses;
-    private Database $firebaseDatabase;
 
-    public function __construct(Database $firebaseDatabase)
+    public function __construct(private Database $firebaseDatabase)
     {
-        $this->firebaseDatabase = $firebaseDatabase;
     }
     public function orderService(string $serviceType, Request $request)
     {
@@ -36,12 +37,12 @@ class TransportationController extends Controller
         try {
             $transportType = match ($serviceType) {
                 'taxi' => new TransportTaxiService($this->firebaseDatabase),
-                'travle'=> new TransportTravelService($this->firebaseDatabase),
-                'luxury'=> new TransportLuxuryService($this->firebaseDatabase),
-                'wedding'=>new TransportWeddingService($this->firebaseDatabase),
-                'mood'=>new TransportMoodService($this->firebaseDatabase),
-                'shipping'=>new TransportShippingService($this->firebaseDatabase),
-                'drive_lessons'=>new TransportDriveLessonsService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
             };
 
             $context = new TransportContext($transportType);
@@ -53,51 +54,69 @@ class TransportationController extends Controller
         }
     }
 
-    public function CancelOrderService(string $serviceType,$id)
-    {
 
+
+
+    public function updateOrder(Request $request, string $serviceType, string $id)
+    {
         try {
             $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
 
-                'travle'=> new TransportTravelService($this->firebaseDatabase),
             };
 
             $context = new TransportContext($transportType);
+            return $response = $context->updateOrder($request, $id);
+            //return $this->indexOrShowResponse('data', $response, 200);
 
-            $orderResponse = $context->CancelOrderTransportService($id);
-            return 'done';
         } catch (Exception $e) {
+
+
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
 
 
-    public function acceptTransportOrder(string $serviceType,Request $request)
-    {
 
+    public function cancelOrder(Request $request, string $serviceType, string $id)
+    {
         try {
             $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
 
-                'travle'=> new TransportTravelService($this->firebaseDatabase),
             };
 
             $context = new TransportContext($transportType);
 
-           return  $orderResponse = $context->acceptTransportOrder($request);
+            return $response = $context->cancelOrder($id, $request);
+            //return $this->indexOrShowResponse('data', $response, 200);
 
         } catch (Exception $e) {
+
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
 
     public function getOrderOfferTransport(string $serviceType)
     {
-      
+
 
         try {
             $transportType = match ($serviceType) {
 
-                'travle'=> new TransportTravelService($this->firebaseDatabase),
+                'travel'=> new TransportTravelService($this->firebaseDatabase),
             };
 
             $context = new TransportContext($transportType);
@@ -114,12 +133,12 @@ class TransportationController extends Controller
 
     public function acceptOrderOfferTransport(string $serviceType,$id)
     {
-      
+
 
         try {
             $transportType = match ($serviceType) {
 
-                'travle'=> new TransportTravelService($this->firebaseDatabase),
+                'travel'=> new TransportTravelService($this->firebaseDatabase),
             };
 
             $context = new TransportContext($transportType);
@@ -139,7 +158,7 @@ class TransportationController extends Controller
         try {
             $transportType = match ($serviceType) {
 
-                'travle'=> new TransportTravelService($this->firebaseDatabase),
+                'travel'=> new TransportTravelService($this->firebaseDatabase),
             };
 
             $context = new TransportContext($transportType);
@@ -151,6 +170,52 @@ class TransportationController extends Controller
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
+
+
+    public function subscriptionOrder(string $serviceType,$id)
+    {
+
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travel'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+
+            return $orderResponse = $context->subscriptionOrder($id);
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+
+
+
+    public function cancelOrderOffer(string $serviceType,Request $request,$id)
+    {
+
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travel'=> new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+
+            return $orderResponse = $context->cancelOrderOffer($request,$id);
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
+
 
 
 }

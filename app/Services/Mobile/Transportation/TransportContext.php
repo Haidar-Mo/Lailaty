@@ -2,6 +2,7 @@
 
 namespace App\Services\Mobile\Transportation;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 /**
@@ -9,29 +10,24 @@ use Illuminate\Http\Request;
  */
 class TransportContext
 {
-    private InterfaceTransport $transportType;
 
-    public function __construct(InterfaceTransport $transportType)
+    public function __construct(private InterfaceTransport $transportType)
     {
-        $this->transportType = $transportType;
     }
-
+    //: Client section
     public function orderTransportService(Request $request)
     {
         return $this->transportType->orderTransportService($request);
     }
-    public function CancelOrderTransportService( $id){
-        return $this->transportType->CancelOrderTransportService($id);
-    }
 
-    public function acceptTransportOrder(Request $request){
-        return $this->transportType->acceptTransportOrder($request);
-    }
+
 
     public function getOrderOfferTransport(){
         return $this->transportType->getOrderOfferTransport();
 
     }
+
+
     public function acceptOrderOfferTransport($id){
         return $this->transportType->acceptOrderOfferTransport($id);
     }
@@ -40,5 +36,43 @@ class TransportContext
     }
 
 
+
+
+
+    public function updateOrder(Request $request, string $id)
+    {
+        return $this->transportType->updateOrder($request, $id);
+
+    }
+
+    public function cancelOrder(string $id, Request $request)
+    {
+        return $this->transportType->cancelOrder($id, $request);
+    }
+
+
+    //: Driver section
+    public function acceptTransportOrder(Request $request, string $id)
+    {
+        return $this->transportType->acceptTransportOrder($request, $id);
+    }
+
+    public function cancelTransportOrder(Request $request, string $id)
+    {
+        return $this->transportType->cancelTransportOrder($request, $id);
+    }
+
+    public function cancelOrderOffer(Request $request,string $id){
+        return $this->transportType->cancelOrderOffer($request,$id);
+
+    }
+
+    public function subscriptionOrder($id){
+        return $this->transportType->subscriptionOrder($id);
+    }
+
+    public function finishTransportOrder(string $id){
+        return $this->transportType->finishTransportOrder($id);
+    }
 
 }
