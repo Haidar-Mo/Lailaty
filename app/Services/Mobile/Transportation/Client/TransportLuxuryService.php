@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Mobile\Transportation;
+namespace App\Services\Mobile\Transportation\Client;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Database;
@@ -18,8 +18,8 @@ class TransportLuxuryService implements InterfaceTransport
         $this->firebaseDatabase = $firebaseDatabase;
     }
 
-
-    public function orderTransportService(Request $request)
+    //: Order Section
+    public function createTransportOrder(Request $request)
     {
         $luxury = Service::where('name', 'luxury')->first();
 
@@ -37,7 +37,7 @@ class TransportLuxuryService implements InterfaceTransport
             $order = $user->order()->create(array_merge($data, ['service_id' => $luxury->id]));
             $order->destination()->create([
                 'destination_latitude' => $data['destination_latitude'],
-                'destination_lobgitude' => $data['destination_longitude']
+                'destination_longitude' => $data['destination_longitude']
             ]);
 
             //!send Notification
@@ -49,15 +49,29 @@ class TransportLuxuryService implements InterfaceTransport
             DB::rollBack();
             throw new Exception('error: ' . $e->getMessage(), 500);
         }
-        
+
     }
 
-    public function updateOrder(Request $request, string $id)
+    public function updatePriceOrder(Request $request, string $id)
+    {
+    }
+    public function updateAutoAcceptOrder(bool $boolean, string $id)
+    {
+    }
+    public function cancelOrder(string $id, Request $request)
+    {
+    }
+    public function subscriptionOrder($id)
     {
     }
 
 
-    public function acceptTransportOrder(Request $request, string $id)
+    //:Offer Section
+
+    public function acceptOffer($id)
+    {
+    }
+    public function rejectOffer(Request $request, string $id)
     {
     }
 

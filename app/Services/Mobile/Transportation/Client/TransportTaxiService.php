@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Mobile\Transportation;
+namespace App\Services\Mobile\Transportation\Client;
 
 use App\Models\Order;
 use App\Models\Service;
@@ -20,7 +20,7 @@ class TransportTaxiService implements InterfaceTransport
 
     }
 
-    //: Client section
+    //: Order section
 
     /**
      * Send a Taxi Order
@@ -28,7 +28,7 @@ class TransportTaxiService implements InterfaceTransport
      * @throws \Exception
      * @return array
      */
-    public function orderTransportService(Request $request)
+    public function createTransportOrder(Request $request)
     {
         $taxi = Service::where('name', 'taxi')->first();
         $user = auth()->user();
@@ -84,7 +84,6 @@ class TransportTaxiService implements InterfaceTransport
         }
     }
 
-
     /**
      * Update a Taxi order
      * @param \Illuminate\Http\Request $request
@@ -92,7 +91,7 @@ class TransportTaxiService implements InterfaceTransport
      * @throws \Exception
      * @return array
      */
-    public function updateOrder(Request $request, string $id)
+    public function updatePriceOrder(Request $request, string $id)
     {
         DB::beginTransaction();
         try {
@@ -131,7 +130,7 @@ class TransportTaxiService implements InterfaceTransport
      * @throws \Exception
      * @return array
      */
-    public function updateAutoAccept(bool $boolean, string $id)
+    public function updateAutoAcceptOrder(bool $boolean, string $id)
     {
         DB::beginTransaction();
         try {
@@ -198,182 +197,16 @@ class TransportTaxiService implements InterfaceTransport
 
     }
 
+    //:Offer Section 
 
-
-
-    //: Driver Section
-
-
-    /**
-     * Accept a Taxi order
-     * -For Driver user-
-     * @param mixed $request
-     * @param mixed $id
-     * @throws \Exception
-     * @return mixed|string[]|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\JsonResponse
-     */
-    public function acceptTransportOrder(Request $request, string $id)
+    public function acceptOffer($id)
     {
-        DB::beginTransaction();
-
-        try {
-            $order = Order::find($id);
-            $vehicle = auth()->user()->driveVehicle()->first();
-
-            if (!$vehicle || $order->vehicle_id != $vehicle->id)
-                throw new Exception('unauthenticated', 422);
-
-            if (!$order || $order->status != 'pending')
-                throw new Exception('error: can not accept this order....', 422);
-
-            $request->validate([
-                'price' => 'required|numeric'
-            ]);
-
-            if ($order->auto_accept && (float) $order->price === (float) $request->price) {
-                $order->update([
-                    'user_id' => auth()->user()->id,
-                    'status' => 'accepted'
-                ]);
-                $this->updateFirebaseOrder($order, ['status' => 'accepted']);
-
-                $order->offer()->delete();
-                DB::commit();
-                return ['message' => 'order has been accepted'];
-            }
-
-
-            $offer = $order->offer()->create([
-                'user_id' => $order->user_id,
-                'vehicle_id' => $vehicle->id,
-                'price' => $request->price
-
-            ]);
-
-            //* update the firebase database record
-            $this->updateFirebaseOffers($order, $offer);
-
-            DB::commit();
-            return ['offer' => $offer, 'message' => 'the offer has been sended to client'];
-
-        } catch (Exception $e) {
-            DB::rollback();
-            if (!in_array($e->getCode(), ['422']))
-                report($e);
-            throw new Exception($e->getMessage(), $e->getCode());
-        }
     }
-
-
-    /**
-     * Cancel a Taxi order
-     * @param \Illuminate\Http\Request $request
-     * @param string $id
-     * @throws \Exception
-     * @return string[]
-     */
-    public function cancelTransportOrder(Request $request, string $id)
+    public function rejectOffer(Request $request, string $id)
     {
-        DB::beginTransaction();
-        try {
-            $order = Order::find($id);
-            $vehicle = auth()->user()->driveVehicle()->first();
-
-            if (!$vehicle || $order->vehicle_id != $vehicle->id)
-                throw new Exception('unauthenticated', 422);
-
-            if (!$order || $order->status->not_in(['pending', 'accepted']))
-                throw new Exception('can not cancel this order....', 422);
-
-            $data = $request->validate([
-                'cancel_reason' => 'required'
-            ]);
-
-            $order->update([
-                'status' => 'cancel',
-                'cancel_reason' => $data['cancel_reason']
-            ]);
-            $this->deleteFirebaseOrder($order);
-
-            //do: send notification to client
-            DB::commit();
-            return ['message' => 'order canceled successfully!'];
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
     }
-
-
-    /**
-     * Start delivering the client
-     * @param string $id
-     * @throws \Exception
-     * @return string[]
-     */
-    public function startTransportOrder(string $id)
+    public function subscriptionOrder($id)
     {
-        DB::beginTransaction();
-        try {
-            $order = Order::find($id);
-            $vehicle = auth()->user()->driveVehicle()->first();
-
-            if (!$vehicle || $order->vehicle_id != $vehicle->id)
-                throw new Exception('unauthenticated', 422);
-
-            if (!$order || $order->status->not_in(['canceled', 'pending', 'delivering', 'ended']))
-                throw new Exception('can not start this order....', 422);
-
-            $order->update([
-                'status' => 'delivering',
-            ]);
-            $this->updateFirebaseOrder($order, ['status' => 'delivering']);
-
-            //do: send notification to client
-
-            DB::commit();
-            return ['message' => 'order started successfully!'];
-
-        } catch (Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
-
-
-    /**
-     * Finish delivering the client
-     * @param string $id
-     * @throws \Exception
-     * @return string[]
-     */
-    public function finishTransportOrder(string $id)
-    {
-        DB::beginTransaction();
-        try {
-            $order = Order::find($id);
-            $vehicle = auth()->user()->driveVehicle()->first();
-
-            if (!$vehicle || $order->vehicle_id != $vehicle->id)
-                throw new Exception('unauthenticated', 422);
-
-            if (!$order || $order->status->not_in(['accepted', 'canceled', 'pending', 'ended']))
-                throw new Exception('can not finish this order....', 422);
-
-            $order->update([
-                'status' => 'ended',
-            ]);
-            $this->updateFirebaseOrder($order, ['status' => 'ended']);
-
-            //do: send notification to client
-
-            DB::commit();
-            return ['message' => 'order finished successfully!'];
-
-        } catch (Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
     }
 
 
