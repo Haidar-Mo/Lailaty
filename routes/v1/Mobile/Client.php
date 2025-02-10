@@ -17,10 +17,9 @@ Route::prefix('client/')
         Route::prefix('transports')
             ->group(function () {
 
-                Route::post('order/{serviceType}', [TransportationController::class, 'orderService']);
-
-                Route::post('update/price/{serviceType}/{id}', [TransportationController::class, 'updateOrder']);
-                Route::post('update/auto-accept/{boolean}/{serviceType}/{id}', [TransportationController::class, 'updateAutoAccept']);
+                Route::post('order/{serviceType}', [TransportationController::class, 'createOrder']);
+                Route::post('update/price/{serviceType}/{id}', [TransportationController::class, 'updatePriceOrder']);
+                Route::post('update/auto-accept/{boolean}/{serviceType}/{id}', [TransportationController::class, 'updateAutoAcceptOrder']);
                 Route::post('cancel/{serviceType}/{id}', [TransportationController::class, 'cancelOrder']);
 
 
