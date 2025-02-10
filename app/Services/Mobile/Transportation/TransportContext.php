@@ -45,6 +45,11 @@ class TransportContext
 
     }
 
+    public function updateAutoAccept(bool $boolean, string $id)
+    {
+        return $this->transportType->updateAutoAccept($boolean, $id);
+    }
+
     public function cancelOrder(string $id, Request $request)
     {
         return $this->transportType->cancelOrder($id, $request);
@@ -61,6 +66,7 @@ class TransportContext
     {
         return $this->transportType->cancelTransportOrder($request, $id);
     }
+
 
     public function cancelOrderOffer(Request $request,string $id){
         return $this->transportType->cancelOrderOffer($request,$id);

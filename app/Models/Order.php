@@ -24,7 +24,7 @@ class Order extends Model
         'price',
         'type',
         'note',
-        'status', //* 'pending' 'accepted' 'cancelled' 'delivering' 'ended'
+        'status', //** 'pending' 'accepted' 'canceled' 'delivering' 'ended'
         'number_of_seats',
         'auto_accept',
         'cancel_reason',
