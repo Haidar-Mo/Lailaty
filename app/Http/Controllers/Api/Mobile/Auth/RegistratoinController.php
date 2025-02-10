@@ -144,7 +144,7 @@ class RegistratoinController extends Controller
             $pending_user = PendingUser::where('email', $request->email)->firstOrFail();
 
             if ($pending_user->email_verified_at == null)
-                return response()->josn([
+                return response()->json([
                     'message' => 'your Email must be verified first'
                 ]);
 

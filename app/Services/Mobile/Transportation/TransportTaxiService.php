@@ -2,7 +2,6 @@
 
 namespace App\Services\Mobile\Transportation;
 
-use App\Http\Requests\TransportRequest;
 use App\Models\Order;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -119,9 +118,40 @@ class TransportTaxiService implements InterfaceTransport
             if (!in_array($e->getCode(), ['422']))
                 report($e);
 
-            throw new Exception($e->getMessage(), 422);
+            throw $e;
         }
 
+    }
+
+
+    /**
+     * Update the Auto-Accept choice
+     * @param bool $boolean
+     * @param string $id
+     * @throws \Exception
+     * @return array
+     */
+    public function updateAutoAccept(bool $boolean, string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = auth()->user()->order()
+                ->where('status', 'pending')
+                ->where('id', $id)
+                ->first();
+
+            if ($order == null)
+                throw new Exception('no pending order founded..!', 422);
+            $order->update(['auto_accept' => $boolean]);
+            DB::commit();
+            return ['order' => $order, 'message' => 'order has been updated'];
+        } catch (Exception $e) {
+            DB::rollback();
+            if (!in_array($e->getCode(), ['422']))
+                report($e);
+
+            throw $e;
+        }
     }
 
 
@@ -161,6 +191,8 @@ class TransportTaxiService implements InterfaceTransport
 
         } catch (Exception $e) {
             DB::rollback();
+            if (!in_array($e->getCode(), ['422']))
+                report($e);
             throw $e;
         }
 
@@ -348,7 +380,7 @@ class TransportTaxiService implements InterfaceTransport
 
     //: Helper functions :
 
-    //* prepare Firebase data
+    //** prepare Firebase data
 
     private function prepareOrderData($order, $user)
     {
@@ -370,7 +402,7 @@ class TransportTaxiService implements InterfaceTransport
     }
 
 
-    //* push order to Firebase
+    //** push order to Firebase
     private function pushOrderToFirebase(bool $femaleDriver, array $orderData)
     {
         try {
@@ -384,7 +416,7 @@ class TransportTaxiService implements InterfaceTransport
     }
 
 
-    //* Update firebase Order
+    //** Update firebase Order
     private function updateFirebaseOrder(Order $order, array $data)
     {
         try {
@@ -400,7 +432,7 @@ class TransportTaxiService implements InterfaceTransport
     }
 
 
-    //* Delete firebase Order
+    //** Delete firebase Order
     private function deleteFirebaseOrder(Order $order)
     {
         try {
@@ -415,7 +447,7 @@ class TransportTaxiService implements InterfaceTransport
         }
     }
 
-    //* update Firebase with offers
+    //** update Firebase with offers
     private function updateFirebaseOffers(Order $order, $offer)
     {
         try {

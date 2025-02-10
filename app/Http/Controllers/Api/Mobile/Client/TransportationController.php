@@ -42,7 +42,9 @@ class TransportationController extends Controller
             $orderResponse = $context->orderTransportService($request);
             return $this->indexOrShowResponse('order', $orderResponse, 201);
         } catch (Exception $e) {
-            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+
+            $code = in_array($e->getCode(), ['422', '400']) ? $e->getCode() : '500';
+            return $this->sudResponse('error: ' . $e->getMessage(), $code);
         }
     }
 
@@ -67,10 +69,35 @@ class TransportationController extends Controller
 
         } catch (Exception $e) {
 
-            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+            $code = in_array($e->getCode(), ['422', '400']) ? $e->getCode() : '500';
+            return $this->sudResponse('error: ' . $e->getMessage(), $code);
         }
     }
 
+    public function updateAutoAccept(bool $boolean, string $serviceType, string $id)
+    {
+        try {
+            $transportType = match ($serviceType) {
+                'taxi' => new TransportTaxiService($this->firebaseDatabase),
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+                'luxury' => new TransportLuxuryService($this->firebaseDatabase),
+                'wedding' => new TransportWeddingService($this->firebaseDatabase),
+                'mood' => new TransportMoodService($this->firebaseDatabase),
+                'shipping' => new TransportShippingService($this->firebaseDatabase),
+                'drive_lessons' => new TransportDriveLessonsService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+
+            $response = $context->updateAutoAccept($boolean, $id);
+            return $this->indexOrShowResponse('data', $response, 200);
+
+        } catch (Exception $e) {
+
+            $code = in_array($e->getCode(), ['422', '400']) ? $e->getCode() : '500';
+            return $this->sudResponse('error: ' . $e->getMessage(), $code);
+        }
+    }
 
     public function cancelOrder(Request $request, string $serviceType, string $id)
     {
@@ -92,7 +119,8 @@ class TransportationController extends Controller
 
         } catch (Exception $e) {
 
-            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+            $code = in_array($e->getCode(), ['422', '400']) ? $e->getCode() : '500';
+            return $this->sudResponse('error: ' . $e->getMessage(), $code);
         }
     }
 }
