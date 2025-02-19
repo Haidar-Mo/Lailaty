@@ -105,7 +105,7 @@ class TransportTaxiService implements InterfaceTransport
             ]);
             $this->deleteFirebaseOrder($order);
 
-            //do: send notification to client
+            //DO: send notification to client
             DB::commit();
             return ['message' => 'order canceled successfully!'];
         } catch (Exception $e) {
@@ -135,7 +135,7 @@ class TransportTaxiService implements InterfaceTransport
             ]);
             $this->updateFirebaseOrder($order, ['status' => 'delivering']);
 
-            //do: send notification to client
+            //DO: send notification to client
 
             DB::commit();
             return ['message' => 'order started successfully!'];
@@ -167,7 +167,7 @@ class TransportTaxiService implements InterfaceTransport
             ]);
             $this->updateFirebaseOrder($order, ['status' => 'ended']);
 
-            //do: send notification to client
+            //DO: send notification to client
 
             DB::commit();
             return ['message' => 'order finished successfully!'];

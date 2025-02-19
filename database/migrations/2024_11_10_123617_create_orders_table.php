@@ -30,6 +30,7 @@ return new class extends Migration {
             $table->enum('type', ['private', 'shared'])->default('private');
             $table->boolean('auto_accept')->default(0);
             $table->enum('status', ['pending', 'accepted', 'canceled', 'delivering','ended'])->default('pending'); 
+            $table->boolean('delivered')->default(0);
             $table->text('cancel_reason')->nullable();
             $table->string('reference_key')->nullable();
             $table->timestamps();

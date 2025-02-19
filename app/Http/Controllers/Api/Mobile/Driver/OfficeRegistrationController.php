@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api\Mobile\Driver;
 
 use App\Http\Controllers\Controller;
-use App\Rules\EgyptionPhoneNumber;
+use App\Rules\EgyptianPhoneNumber;
 use App\Services\Mobile\OfficeRegistrationService;
 use App\Traits\Responses;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class OfficeRegisterationController extends Controller
+class OfficeRegistrationController extends Controller
 {
     use Responses;
 
@@ -20,7 +20,7 @@ class OfficeRegisterationController extends Controller
     }
 
     /**
-     * Show the authenticated user's offic
+     * Show the authenticated user's office
      * @return \Illuminate\Http\JsonResponse
      */
     public function show()
@@ -30,7 +30,7 @@ class OfficeRegisterationController extends Controller
         return $this->indexOrShowResponse("office", $office, 200);
     }
 
-    
+
     /**
      * Create a new office for the authenticated user
      * @param \Illuminate\Http\Request $request
@@ -40,7 +40,7 @@ class OfficeRegisterationController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'phone_number' => ['required', 'string', 'unique:offices,phone_number', new EgyptionPhoneNumber],
+            'phone_number' => ['required', 'string', 'unique:offices,phone_number', new EgyptianPhoneNumber],
             'email' => 'required|email|unique:offices,email',
             'commercial_registration_number' => 'required|string|unique:offices,commercial_registration_number',
             'latitude' => 'nullable|numeric',
@@ -58,6 +58,39 @@ class OfficeRegisterationController extends Controller
 
             return $this->indexOrShowResponse("office", $office, 200);
 
+        } catch (Exception $e) {
+            return $this->sudResponse($e->getMessage(), 500);
+        }
+    }
+
+
+    /**
+     * Update an existing office for the authenticated user
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'phone_number' => ['sometimes', 'required', 'string', 'unique:offices,phone_number,' . $id, new EgyptianPhoneNumber],
+            'email' => 'sometimes|required|email|unique:offices,email,' . $id,
+            'commercial_registration_number' => 'sometimes|required|string|unique:offices,commercial_registration_number,' . $id,
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+        ]);
+
+        $user = Auth::user();
+        $office = $user->office()->where('id', $id)->first();
+
+        if (!$office) {
+            return $this->sudResponse("Office not found or not owned by user", 404);
+        }
+
+        try {
+            $office->update($data);
+            return $this->indexOrShowResponse("office", $office, 200);
         } catch (Exception $e) {
             return $this->sudResponse($e->getMessage(), 500);
         }
@@ -102,11 +135,11 @@ class OfficeRegisterationController extends Controller
     public function updateOfficeDocument(Request $request)
     {
         $request->validate([
-            'tax_card' => 'nullable|image',
-            'commercial_registration_card' => 'nullable|image',
-            'insurance_card' => 'nullable|image',
-            'value_added_tax_card' => 'nullable|image',
-            'attached_document' => 'nullable|image',
+            'tax_card' => 'sometimes|image',
+            'commercial_registration_card' => 'sometimes|image',
+            'insurance_card' => 'sometimes|image',
+            'value_added_tax_card' => 'sometimes|image',
+            'attached_document' => 'sometimes|image',
         ]);
 
         $user = Auth::user();
@@ -121,6 +154,8 @@ class OfficeRegisterationController extends Controller
             return $this->sudResponse($e->getMessage(), 500);
         }
     }
+
+
 
 
 }
