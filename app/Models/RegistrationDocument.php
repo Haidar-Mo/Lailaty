@@ -13,11 +13,13 @@ class RegistrationDocument extends Model
 
     protected $fillable = [
         'user_id',
+        'personal_image',
         'driver_license_frontFace',
         'driver_license_backFace',
         'personal_card_frontFace',
         'personal_card_backFace',
         'criminal_record',
+        'birth_date',
     ];
 
 

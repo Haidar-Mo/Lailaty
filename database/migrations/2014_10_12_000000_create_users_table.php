@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('birth_date')->nullable();
             $table->boolean('is_active')->default(false);
             $table->boolean('can_create_office')->default(false);
+            $table->date('create_captain_date')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

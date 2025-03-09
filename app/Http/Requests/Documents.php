@@ -22,11 +22,13 @@ class Documents extends FormRequest
     public function rules(): array
     {
         return [
-            'driver_license_frontFace'=>'required|image',
-            'driver_license_backFace'=>'required|image',
-            'personal_card_frontFace'=>'required|image',
-            'personal_card_backFace'=>'required|image',
-            'criminal_record'=>'nullable|image',
+            'personal_image' => 'required|image',
+            'driver_license_frontFace' => 'required|image',
+            'driver_license_backFace' => 'required|image',
+            'personal_card_frontFace' => 'required|image',
+            'personal_card_backFace' => 'required|image',
+            'criminal_record' => 'nullable|image',
+            'birth_date' => 'required|date'
         ];
     }
 }
