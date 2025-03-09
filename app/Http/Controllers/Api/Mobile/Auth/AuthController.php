@@ -5,14 +5,10 @@ namespace App\Http\Controllers\Api\Mobile\Auth;
 use App\Enums\TokenAbility;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Rules\EgyptionPhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use DB;
-use Exception;
-use Str;
 
 class AuthController extends Controller
 {
@@ -25,15 +21,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone_number' => ['required', 'string', 'exists:users,phone_number', new EgyptionPhoneNumber],
+            'email' => ['required', 'string', 'exists:users,email'],
             'password' => ['required', 'string'],
-            'deviceToken' => ['nullable']
+            'deviceToken' => ['sometimes']
         ]);
-        $credentials = $request->only('phone_number', 'password');
+        $credentials = $request->only('email', 'password');
 
         if (!Auth::attempt($credentials)) {
 
-            return response()->json(['message' => 'يرجى التحقق من كلمة المرور أو رقم الهاتف'], 401);
+            return response()->json(['message' => 'Please check the email and password'], 401);
         }
         $user = User::find(Auth::user()->id);
         if ($request->has('deviceToken')) {
@@ -43,7 +39,7 @@ class AuthController extends Controller
 
         $accessToken = $user->createToken(
             'access_token',
-            [TokenAbility::ACCESS_API->value, $user->roles()->first()->name],
+            [TokenAbility::ACCESS_API->value],
             Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
         );
 
@@ -55,7 +51,7 @@ class AuthController extends Controller
 
         $user->load('roles');
         return response()->json([
-            'message' => 'تم تسجيل الدخول بنجاح',
+            'message' => 'Logged in successfully ',
             'access_token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'user' => $user,
@@ -86,7 +82,7 @@ class AuthController extends Controller
         $user->tokens()->delete();
         $accessToken = $user->createToken(
             'access_token',
-            [TokenAbility::ACCESS_API->value, 'role:' . $user->roles->first()->name],
+            [TokenAbility::ACCESS_API->value],
             Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
         );
 
@@ -96,7 +92,7 @@ class AuthController extends Controller
             Carbon::now()->addMinutes(config('sanctum.rt_expiration'))
         );
         return response()->json([
-            'message' => '.تم إنشاء الرمز بنجاح',
+            'message' => '.Token created successfully ',
             'access_token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'user' => $user,

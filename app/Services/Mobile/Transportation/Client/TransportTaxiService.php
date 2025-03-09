@@ -71,7 +71,7 @@ class TransportTaxiService implements InterfaceTransport
                 'reference_key' => $firebase_order->getKey(),
             ]);
 
-            //do: send Notification
+            //DO: send Notification
 
             DB::commit();
             return ["order" => $order, "message" => "order has been sended"];
@@ -182,7 +182,7 @@ class TransportTaxiService implements InterfaceTransport
                 'cancel_reason' => $data['cancel_reason']
             ]);
 
-            //do: send notification if there is an driver 
+            //DO: send notification if there is an driver 
 
             $this->deleteFirebaseOrder($order);
             DB::commit();

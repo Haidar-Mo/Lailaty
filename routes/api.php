@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Mobile\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,3 @@ Route::prefix('v1/')->group(function () {
     include __DIR__ . "/v1/Mobile/Report.php";
     include __DIR__ . "/v1/Mobile/Rate.php";
 });
-

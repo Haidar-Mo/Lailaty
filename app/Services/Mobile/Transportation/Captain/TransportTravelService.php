@@ -108,7 +108,7 @@ class TransportTravelService implements InterfaceTransport
                 'status' => 'delivering',
             ]);
 
-            //do: send notification to client
+            //DO: send notification to client
 
             DB::commit();
             return ['message' => 'order started successfully!'];
@@ -137,7 +137,7 @@ class TransportTravelService implements InterfaceTransport
                 'status' => 'ended',
             ]);
 
-            //do: send notification to client
+            //DO: send notification to client
 
             DB::commit();
             return ['message' => 'order finished successfully!'];

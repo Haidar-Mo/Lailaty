@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Mobile;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\Mobile\ProfileService;
 use App\Traits\Responses;
 use Illuminate\Http\Request;

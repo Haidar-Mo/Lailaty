@@ -14,11 +14,13 @@ class UpdateDocuments extends FormRequest
     public function rules(): array
     {
         return [
-            'driver_license_frontFace'=>'nullable|image',
-            'driver_license_backFace'=>'nullable|image',
-            'personal_card_frontFace'=>'nullable|image',
-            'personal_card_backFace'=>'nullable|image',
-            'criminal_record'=>'nullable|image',
+            'personal_image' => 'sometimes|image',
+            'driver_license_frontFace' => 'sometimes|image',
+            'driver_license_backFace' => 'sometimes|image',
+            'personal_card_frontFace' => 'sometimes|image',
+            'personal_card_backFace' => 'sometimes|image',
+            'criminal_record' => 'sometimes|image',
+            'birth_date' => 'sometimes|date'
         ];
     }
 }

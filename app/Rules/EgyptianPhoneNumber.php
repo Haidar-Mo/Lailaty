@@ -5,7 +5,7 @@ namespace App\Rules;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class EgyptionPhoneNumber implements ValidationRule
+class EgyptianPhoneNumber implements ValidationRule
 {
     /**
      * Run the validation rule.

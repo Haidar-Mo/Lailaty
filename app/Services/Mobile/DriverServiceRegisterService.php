@@ -3,7 +3,6 @@
 namespace App\Services\Mobile;
 
 use App\Models\Service;
-use App\Models\VehicleService;
 use DB;
 use Exception;
 
@@ -11,18 +10,19 @@ use Exception;
 class DriverServiceRegisterService
 {
 
-
-    public function registerServiceForMotorcycle($vehicle)
+    public function updateServiceForMotorcycle($vehicle)
     {
         DB::beginTransaction();
         try {
             $service = Service::where('name', 'داخلي')->firstOrFail();
-            $vehicle->service()->create([
-                'service_id' => $service->id,
-                'is_activated' => true
-            ]);
+            $vehicle->service()->updateOrCreate(
+                ['service_id' => $service->id],
+                [
+                    'is_activated' => true
+                ]
+            );
 
-            //!  subscribe to firebse channel 
+            //DO:  subscribe to firebase channel 
 
             DB::commit();
             $vehicle->load('service');
@@ -34,25 +34,28 @@ class DriverServiceRegisterService
     }
 
 
-    public function registerServiceForCar($vehicle, $data)
+    public function updateServiceForCar($vehicle, $data)
     {
         DB::beginTransaction();
         try {
             foreach ($data as $key => $value) {
-
                 $service = Service::where('name', $key)->first();
-                $registerd_service = new VehicleService();
-                $registerd_service->vehicle_id = $vehicle->id;
-                $registerd_service->service_id = $service->id;
-                $registerd_service->is_activated = $value;
+                if ($service) {
+                    $vehicleService = $vehicle->service()->where('service_id', $service->id)->first();
+                    if ($vehicleService) {
+                        $vehicleService->update(['is_activated' => $value]);
+                    } else {
+                        $vehicle->service()->create(['service_id' => $service->id, 'is_activated' => $value]);
+                    }
+                }
+
                 if ($key === 'wedding' && $value == true) {
-                    $vehicle->wedding_category_id = $data->wedding_category_id;
+                    $vehicle->wedding_category_id = $data['wedding_category_id'] ?? null;
                     $vehicle->save();
                 }
-                $registerd_service->save();
             }
 
-            //!  subscribe to firebse channel
+            //DO: update subscription to firebase channel if needed
 
             DB::commit();
             $vehicle->load('service');
@@ -62,4 +65,6 @@ class DriverServiceRegisterService
             throw new Exception($e->getMessage(), 500);
         }
     }
+
+
 }

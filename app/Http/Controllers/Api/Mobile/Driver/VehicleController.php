@@ -59,7 +59,7 @@ class VehicleController extends Controller
             $vehicle->load(['image', 'ownershipDocument']);
             return $this->indexOrShowResponse('vehicle', $vehicle, 201);
         } catch (Exception $e) {
-            return $this->sudResponse('erroe: ' . $e->getMessage(), 500);
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
 

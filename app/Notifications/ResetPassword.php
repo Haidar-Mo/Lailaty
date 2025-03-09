@@ -93,7 +93,7 @@ class ResetPassword extends Notification
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         }
-        return 'laylaty-mobile://reset-password?token=' . $this->token . '&email=' . urlencode($notifiable->getEmailForPasswordReset());
+        return env(key: 'APP_URL') . '://reset-password?token=' . $this->token . '&email=' . urlencode($notifiable->getEmailForPasswordReset());
 
         /*  return url(route('password.reset', [
                     'token' => $this->token,

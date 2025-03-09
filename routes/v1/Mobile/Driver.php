@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Mobile\Driver\VehicleServiceRegisterController;
 use App\Http\Controllers\Api\Mobile\Driver\VehicleWorkRequestController;
 use App\Http\Controllers\Api\Mobile\Driver\TransportationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Mobile\Driver\OfficeRegisterationController;
+use App\Http\Controllers\Api\Mobile\Driver\OfficeRegistrationController;
 
 
 Route::prefix('captain/')
@@ -21,13 +21,13 @@ Route::prefix('captain/')
         Route::prefix('offices/')
             // ->middleware('can:create-office')
             ->group(function () {
-                Route::get('show', [OfficeRegisterationController::class, 'show']);
+                Route::get('show', [OfficeRegistrationController::class, 'show']);
 
-                Route::post('create', [OfficeRegisterationController::class, 'store']);
+                Route::post('create', [OfficeRegistrationController::class, 'store']);
 
-                Route::post('document/create', [OfficeRegisterationController::class, 'storeOfficeDocument']);
+                Route::post('document/create', [OfficeRegistrationController::class, 'storeOfficeDocument']);
 
-                Route::post('document/update', [OfficeRegisterationController::class, 'updateOfficeDocument']);
+                Route::post('document/update', [OfficeRegistrationController::class, 'updateOfficeDocument']);
 
             });
 

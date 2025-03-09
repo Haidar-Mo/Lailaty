@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             'birth_date' => '2000/01/01',
             'deviceToken' => 'some_random_device_token',
             'is_active' => true,
-            'email_verified_at' => now(),
         ]);
         $haidar = User::create([
             'email' => 'mohammad44.hiadar@gmail.com',
@@ -38,10 +37,9 @@ class DatabaseSeeder extends Seeder
             'birth_date' => '2000/01/01',
             'deviceToken' => 'QWERTYUIOPASDFGHJKLZXCVBNM',
             'is_active' => true,
-            'email_verified_at' => now(),
         ]);
 
-      
+
         $this->call(RolesSeeder::class);
 
         $this->call(PermissionSeeder::class);

@@ -31,8 +31,6 @@ class User extends Authenticatable
         'birth_date',
         'deviceToken',
         'is_active',
-        'full_registered',
-        //'create_capitan_date',
         'rate',
         'office_id',
         'email_verified_at',
@@ -42,7 +40,9 @@ class User extends Authenticatable
 
     protected $appends = [
         'image_url',
-        'rate'
+        'rate',
+        'is_full_registered',
+        'role_name',
     ];
 
     /**
@@ -127,7 +127,7 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
-     public function rate(): HasMany
+    public function rate(): HasMany
     {
         return $this->hasMany(Rate::class);
     }
@@ -136,7 +136,7 @@ class User extends Authenticatable
     {
         return $this->morphMany(Rate::class, 'rateable');
     }
-    
+
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
@@ -152,8 +152,19 @@ class User extends Authenticatable
         return null;
     }
 
+    public function getIsFullRegisteredAttribute()
+    {
+        if ($this->first_name && $this->last_name && $this->gender && $this->birth_date) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
-
+    public function getRoleNameAttribute()
+    {
+        return $this->roles()->first()->name;
+    }
     public function getRateAttribute()
     {
         $count = $this->rated()->count();

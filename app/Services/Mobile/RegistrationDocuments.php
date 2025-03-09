@@ -24,10 +24,13 @@ class RegistrationDocuments
         try {
             DB::beginTransaction();
             foreach ($document as $key => $file) {
-                $fileName = $this->saveFile($file, "RegistirationDocuments");
-                $uploadedPaths[$key] = $fileName;
+                if ($key !== 'birth_date') {
+                    $fileName = $this->saveFile($file, "RegistrationDocuments");
+                    $uploadedPaths[$key] = $fileName;
+                }
             }
-            //$user->update(['create_captin_date'=>now()]);
+            $uploadedPaths['birth_date'] = $document['birth_date'];
+            $user->update(['create_captain_date' => now()]);
             $user->registrationDocument()->create($uploadedPaths);
             DB::commit();
         } catch (Exception $e) {
@@ -46,7 +49,7 @@ class RegistrationDocuments
                 if ($newFile) {
                     $currentFile = $existingDocument->$key;
 
-                    $newFileName = $this->saveFile($newFile, "RegistirationDocuments");
+                    $newFileName = $this->saveFile($newFile, "RegistrationDocuments");
 
                     if ($currentFile) {
                         $oldFiles[] = $currentFile;
