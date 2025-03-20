@@ -159,6 +159,7 @@ class RegistrationController extends Controller
                 "phone_number" => ['required', 'string', 'unique:users,phone_number', new EgyptianPhoneNumber],
                 "gender" => ['required', 'in:male,female'],
                 "deviceToken" => ['nullable'],
+                "birth_date" => ['sometimes', 'date'],
                 "city" => ['required'],
                 "role" => ['required'],
                 "can_create_office" => ['nullable']

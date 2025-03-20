@@ -46,16 +46,18 @@ class RegistrationDocuments
         try {
             DB::beginTransaction();
             foreach ($files as $key => $newFile) {
-                if ($newFile) {
-                    $currentFile = $existingDocument->$key;
+                if ($key !== 'birth_date') {
+                    if ($newFile) {
+                        $currentFile = $existingDocument->$key;
 
-                    $newFileName = $this->saveFile($newFile, "RegistrationDocuments");
+                        $newFileName = $this->saveFile($newFile, "RegistrationDocuments");
 
-                    if ($currentFile) {
-                        $oldFiles[] = $currentFile;
-                        $existingDocument->update([$key => $newFileName]);
+                        if ($currentFile) {
+                            $oldFiles[] = $currentFile;
+                            $existingDocument->update([$key => $newFileName]);
+                        }
+
                     }
-
                 }
             }
             if (!empty($oldFiles)) {

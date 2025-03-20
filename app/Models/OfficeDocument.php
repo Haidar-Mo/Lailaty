@@ -19,6 +19,13 @@ class OfficeDocument extends Model
         'attached_document',
     ];
 
+    protected $append = [
+        'tax_card_full_path',
+        'commercial_registration_card_full_path',
+        'insurance_card_full_path',
+        'value_added_tax_card_full_path',
+        'attached_document_full_path',
+    ];
 
     public function office(): BelongsTo
     {
@@ -27,10 +34,35 @@ class OfficeDocument extends Model
 
 
 
-    /** Accessories */
+    //! Accessories 
 
-    /* public function getTaxCardAttribute($value)
-     {
-         return $value ? url('storage/' . $value) : null;
-     }*/
+    public function getTaxCardFullPathAttribute()
+    {
+        return $this->generateFullPath($this->tax_card);
+    }
+
+    public function getCommercialRegistrationCardFullPathAttribute()
+    {
+        return $this->generateFullPath($this->commercial_registration_card);
+    }
+
+    public function getInsuranceCardFullPathAttribute()
+    {
+        return $this->generateFullPath($this->insurance_card);
+    }
+
+    public function getValueAddedTaxCardFullPathAttribute()
+    {
+        return $this->generateFullPath($this->value_added_tax_card);
+    }
+
+    public function getAttachedDocumentFullPathAttribute()
+    {
+        return $this->generateFullPath($this->attached_document);
+    }
+
+    private function generateFullPath($value)
+    {
+        return $value ? url('storage/' . $value) : null;
+    }
 }

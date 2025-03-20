@@ -23,9 +23,7 @@ Route::prefix('captain/')
             ->group(function () {
                 Route::get('show', [OfficeRegistrationController::class, 'show']);
 
-                Route::post('create', [OfficeRegistrationController::class, 'store']);
-
-                Route::post('document/create', [OfficeRegistrationController::class, 'storeOfficeDocument']);
+                Route::post('create/{type}', [OfficeRegistrationController::class, 'store']);
 
                 Route::post('document/update', [OfficeRegistrationController::class, 'updateOfficeDocument']);
 
@@ -42,6 +40,7 @@ Route::prefix('captain/')
                 Route::post('update/{vehicleId}/image/{imageId}', [VehicleController::class, 'updateImage']);
                 Route::post('update/{id}/document/ownership', [VehicleController::class, 'updateOwnershipDocument']);
 
+                Route::get('brand',[VehicleController::class, 'indexBrand']);
             });
 
         Route::prefix('services/')
