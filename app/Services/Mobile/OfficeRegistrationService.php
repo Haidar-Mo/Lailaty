@@ -3,37 +3,34 @@
 namespace App\Services\Mobile;
 
 use App\Models\Office;
+use App\Models\User;
 use App\Traits\HasFiles;
-use App\Traits\Responses;
-use Exception;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Exception;
+
 class OfficeRegistrationService
 {
     use HasFiles;
 
     /**
-     * Store each file inserted from user throught the request
-     * @param \App\Models\Office $office
-     * @param \Illuminate\Http\Request $request
-     * @throws \Exception
-     * @return string[]
+     * Store each file inserted from user through the request
+     * @param \App\Models\User $user
+     * @param \Illuminate\Foundation\Http\FormRequest $request
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function officeDocumentsRegistration(Office $office, Request $request)
+    public function create(User $user, FormRequest $request)
     {
-        try {
-            foreach ($request->files as $key => $val) {
-                $fileName = $this->saveFile($request->file($key), "OfficeDocuments");
-                $uploadedPaths[$key] = $fileName;
-            }
-            $office->document()->create($uploadedPaths);
-            return $uploadedPaths;
-
-        } catch (Exception $e) {
-            throw new Exception("Something went wrong while uploading the image: " . $e->getMessage());
+        $office = $user->office()->create($request->request->all());
+        $uploadedPaths = [];
+        foreach ($request->files as $key => $val) {
+            $fileName = $this->saveFile($request->file($key), "OfficeDocuments");
+            $uploadedPaths[$key] = $fileName;
         }
+        if (!empty($uploadedPaths)) { 
+            $office->document()->create($uploadedPaths);
+        }
+        return $office;
     }
 
 
@@ -44,10 +41,10 @@ class OfficeRegistrationService
      * @throws \Exception
      * @return string[]
      */
-    public function UpdateOfficeDocument(Office $office, Request $request)
+    public function update(Office $office, Request $request)
     {
         try {
-            foreach ($request->files as $key => $vlaue) {
+            foreach ($request->files as $key => $value) {
                 $fileName = $this->saveFile($request->file($key), "OfficeDocuments");
                 if ($office->document->$key)
                     $this->deleteFile($office->document->$key);

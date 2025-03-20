@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\Mobile\Driver;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VehicleCreateRequest;
 use App\Http\Requests\VehicleUpdateRequest;
+use App\Models\CarBrand;
 use App\Models\Vehicle;
 use App\Services\Mobile\DriverVehicleService;
 use App\Traits\Responses;
 use Auth;
-use DB;
 use Exception;
 use Illuminate\Http\Request;
 class VehicleController extends Controller
@@ -141,4 +141,10 @@ class VehicleController extends Controller
     }
 
 
+
+    public function indexBrand()
+    {
+        $brands = CarBrand::all();
+        return $this->indexOrShowResponse('brands', $brands, 200);
+    }
 }

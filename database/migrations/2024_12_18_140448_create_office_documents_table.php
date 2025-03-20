@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('office_id')->constrained('offices')->cascadeOnDelete();
             $table->string('tax_card');
             $table->string('commercial_registration_card');
-            $table->string('insurance_card');
-            $table->string('value_added_tax_card');
+            $table->string('insurance_card')->nullable();
+            $table->string('value_added_tax_card')->nullable();
             $table->string('attached_document')->nullable();
             $table->timestamps();
         });

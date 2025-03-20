@@ -34,7 +34,7 @@ class VehicleCreateRequest extends FormRequest
                     'color' => 'nullable',
                     'gear_type' => 'required|string|in:manual,auto',
                     'is_modified' => 'required',
-                    'original_car_brand_id' => 'nullable',
+                    'original_car_brand_id' => 'nullable|string',
                     'more_the_four_seats' => 'boolean',
                     'image_1' => 'required|image',
                     'image_2' => 'required|image',

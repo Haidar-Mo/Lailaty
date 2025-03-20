@@ -32,13 +32,13 @@ class User extends Authenticatable
         'deviceToken',
         'is_active',
         'rate',
-        'office_id',
         'email_verified_at',
         'verification_code',
         'verification_code_expires_at',
     ];
 
     protected $appends = [
+        'office_id',
         'image_url',
         'rate',
         'is_full_registered',
@@ -144,6 +144,12 @@ class User extends Authenticatable
 
 
     /** Accessories */
+
+    public function getOfficeIdAttribute()
+    {
+        return $this->office()->first()->id ?? null;
+    }
+
     public function getImageUrlAttribute()
     {
         if ($this->image) {
@@ -163,7 +169,7 @@ class User extends Authenticatable
 
     public function getRoleNameAttribute()
     {
-        return $this->roles()->first()->name;
+        return $this->roles()->first()->name ?? null;
     }
     public function getRateAttribute()
     {

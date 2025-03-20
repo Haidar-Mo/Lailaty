@@ -16,8 +16,6 @@ class Office extends Model
         'user_id',
         'name',
         'phone_number',
-        'email',
-        'commercial_registration_number',
         'latitude',
         'longitude',
     ];
@@ -36,5 +34,13 @@ class Office extends Model
     public function document(): HasOne
     {
         return $this->hasOne(OfficeDocument::class);
+    }
+
+
+    //!Accessories
+
+    public function getDocumentsAttribute()
+    {
+        return $this->document()->first() ? $this->document()->first() : null;
     }
 }
