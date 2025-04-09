@@ -11,9 +11,9 @@ use App\Http\Controllers\Api\Mobile\Driver\OfficeRegistrationController;
 
 Route::prefix('captain/')
     ->middleware([
-        'auth:sanctum',
-        'ability:' . TokenAbility::ACCESS_API->value,
-        'role:fleetOwner|freeDriver|employeeDriver',
+        // 'auth:sanctum',
+        // 'ability:' . TokenAbility::ACCESS_API->value,
+        // 'role:fleetOwner|freeDriver|employeeDriver',
 
     ])
     ->group(function () {
@@ -22,7 +22,6 @@ Route::prefix('captain/')
             // ->middleware('can:create-office')
             ->group(function () {
                 Route::get('show', [OfficeRegistrationController::class, 'show']);
-
                 Route::post('create/{type}', [OfficeRegistrationController::class, 'store']);
 
                 Route::post('document/update', [OfficeRegistrationController::class, 'updateOfficeDocument']);
@@ -40,7 +39,7 @@ Route::prefix('captain/')
                 Route::post('update/{vehicleId}/image/{imageId}', [VehicleController::class, 'updateImage']);
                 Route::post('update/{id}/document/ownership', [VehicleController::class, 'updateOwnershipDocument']);
 
-                Route::get('brand',[VehicleController::class, 'indexBrand']);
+                Route::get('brand', [VehicleController::class, 'indexBrand']);
             });
 
         Route::prefix('services/')
@@ -57,6 +56,8 @@ Route::prefix('captain/')
             ->group(function () {
 
                 Route::get('fleet-owner/index', [VehicleWorkRequestController::class, 'indexFleetOwner']);
+               // Route::get('search', [VehicleWorkRequestController::class, 'searchFleetOwner']);
+
                 Route::get('fleet-owner/{id}/vehicle/index', [VehicleWorkRequestController::class, 'indexAvailableVehicle']);
 
                 Route::post('request/create/{id}', [VehicleWorkRequestController::class, 'create']);

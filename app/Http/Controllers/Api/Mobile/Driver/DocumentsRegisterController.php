@@ -66,7 +66,13 @@ class DocumentsRegisterController extends Controller
         }
     }
 
-
+    public function check(Request $request)
+    {
+        $user = $request->user();
+        if ($user->registrationDocument)
+            return true;
+        return false;
+    }
 
 
 
