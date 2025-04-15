@@ -44,7 +44,6 @@ class OfficeRegistrationController extends Controller
             return $this->sudResponse("User cannot have more than one office", 422);
         }
         try {
-
             $office = $this->service->create($user, $request);
             $office->append('documents');
             return $this->indexOrShowResponse("office", $office, 200);

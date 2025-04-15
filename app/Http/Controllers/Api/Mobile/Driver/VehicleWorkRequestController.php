@@ -57,7 +57,7 @@ class VehicleWorkRequestController extends Controller
             $vehicle = Vehicle::findOrFail($id);
             $request = $this->driverWorkService->createWorkRequest($vehicle, $user);
 
-            return $this->indexOrShowResponse('request', $request, 201);
+            return $this->sudResponse('Request send successfully !!', 201);
         } catch (Exception $e) {
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }

@@ -11,8 +11,8 @@ use App\Http\Controllers\Api\Mobile\Driver\OfficeRegistrationController;
 
 Route::prefix('captain/')
     ->middleware([
-        // 'auth:sanctum',
-        // 'ability:' . TokenAbility::ACCESS_API->value,
+         'auth:sanctum',
+         'ability:' . TokenAbility::ACCESS_API->value,
         // 'role:fleetOwner|freeDriver|employeeDriver',
 
     ])
