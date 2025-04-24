@@ -27,8 +27,9 @@ Route::prefix('client/')
                 Route::post('cancel/order/{serviceType}/{id}', [TransportationController::class, 'cancelOrder']);
 
                 Route::post('accept/order/offer/{serviceType}/{id}', [TransportationController::class, 'acceptOrderOfferTransport']);
-                Route::get('order/{serviceType}', [TransportationController::class, 'getOrderOfferTransport']);
-
+                Route::get('order/offer/{serviceType}', [TransportationController::class, 'getOrderOfferTransport']);
+                Route::get('order/{serviceType}', [TransportationController::class, 'getOrderTransport']);
+                Route::get('show/order/offer/{serviceType}/{id}', [TransportationController::class, 'showOffer']);
                 Route::post('update/order/offer/{serviceType}/{id}', [TransportationController::class, 'updateOrderOffer']);
                 Route::post('subscription/order/offer/{serviceType}/{id}', [TransportationController::class, 'subscriptionOrder']);
                 Route::post('cancel/order/offer/{serviceType}/{id}', [TransportationController::class, 'cancelOrderOffer']);

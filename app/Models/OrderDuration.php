@@ -13,7 +13,8 @@ class OrderDuration extends Model
     protected $fillable = [
         'order_id',
         'start',
-        'end'
+        'end',
+        'number_of_days'
     ];
 
 

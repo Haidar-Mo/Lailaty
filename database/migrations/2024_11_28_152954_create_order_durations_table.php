@@ -14,8 +14,8 @@ return new class extends Migration {
         Schema::create('order_durations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
-            $table->dateTime('start')->default(Carbon::now());
-            $table->dateTime('end')->default(Carbon::now());
+            $table->date('start')->default(Carbon::now());
+            $table->date('end')->default(Carbon::now());
             $table->timestamps();
         });
     }
