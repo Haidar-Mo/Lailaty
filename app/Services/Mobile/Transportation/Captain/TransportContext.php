@@ -47,9 +47,13 @@ class TransportContext
         return $this->transportType->updatePriceOffer($request, $id);
     }
 
-    public function getOrderOfferTransport()
+   /* public function getOrderOfferTransport()
     {
         return $this->transportType->getOrderOfferTransport();
+    }*/
+
+    public function getOrderTransport(Request $request){
+        return $this->transportType->getOrderTransport( $request);
     }
 
 }

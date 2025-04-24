@@ -151,10 +151,70 @@ class TransportTravelService implements InterfaceTransport
 
     //: Offer Section
 
-    public function getOrderTransport()
-    {
-        return ['body' => Order::where('type', 'shared')->where('status', 'pending')->with(['destination'])->get()];
+    public function getOrderTransport(Request $request)
+{
+
+    $captain = auth()->user();
+
+    if ($request->status == 'pending') {
+
+        if ($captain->gender == 'female') {
+
+
+            return [
+                'number_of_pending_order' => $this->getNumberOforder('pending', 1),
+                'body' => Order::where('service_id', 3)
+                    ->where('status', 'pending')
+                    ->where('female_driver', 1)
+                    ->with(['destination'])
+                    ->get()
+            ];
+        } else {
+
+            return [
+                'number_of_pending_order' => $this->getNumberOforder('pending', 0),
+                'body' => Order::where('service_id', '3')
+                    ->where('status', 'pending')
+                    ->where('female_driver', 0)
+                    ->with(['destination'])
+                    ->get()
+            ];
+        }
+    } elseif (in_array($request->status, ['ended', 'delivering','accepted','canceled'])) {
+
+
+        return [
+           
+            'body' => Order::where('status', $request->status)
+                ->where('service_id', '3')
+                ->whereHas('vehicle', function($query) use ($captain) {
+                    $query->where('driver_id', $captain->id);
+                })
+                ->with(['destination'])
+                ->get()
+        ];
+
     }
+
+    return response()->json(['message' => 'Invalid status'], 400);
+}
+
+
+
+
+
+
+
+
+
+
+    private function getNumberOforder(string $status, $gender ){
+       return  $number=Order::where('status',$status)->where('female_driver',$gender)->where('service_id',3)->count();
+
+    }
+
+
+    ///public function getOrderTransport
 
 
     public function getOrderOfferTransport()
@@ -189,9 +249,9 @@ class TransportTravelService implements InterfaceTransport
     }
 
 
-    /*  
+    /*
     * تم تعليق هذا التابع لللتأكد من إمكانية تعديل العرض قبل رفضه
-    
+
     public function updatePriceOffer(Request $request, $id)
     {
         $user = auth()->user();

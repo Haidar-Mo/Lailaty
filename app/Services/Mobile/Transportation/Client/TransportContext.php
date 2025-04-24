@@ -41,6 +41,7 @@ class TransportContext
         return $this->transportType->subscriptionOrder($id);
     }
 
+
     //: Offer Section
 
     public function acceptOffer($id)
@@ -53,6 +54,18 @@ class TransportContext
         return $this->transportType->rejectOffer($request, $id);
     }
 
+    public function getOrderOfferTransport()
+    {
+        return $this->transportType->getOrderOfferTransport();
+    }
+    public function showOffer($id)
+    {
+        return $this->transportType->showOffer($id);
+    }
+
+    public function getOrderTransport(Request $request){
+        return $this->transportType->getOrderTransport( $request);
+    }
 
 
 }

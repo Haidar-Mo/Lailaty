@@ -67,7 +67,7 @@ Route::prefix('captain/')
         Route::prefix('orders/')
             //->middleware()
             ->group(function () {
-
+                Route::get('get/order/pending/{serviceType}', [TransportationController::class, 'getOrderTransport']);
                 Route::post('accept/{serviceType}/{id}', [TransportationController::class, 'acceptOrder']);
                 Route::post('cancel/{serviceType}/{id}', [TransportationController::class, 'cancelTransportOrder']);
                 Route::post('update/order/offer/{serviceType}/{id}', [TransportationController::class, 'updateOrder']);

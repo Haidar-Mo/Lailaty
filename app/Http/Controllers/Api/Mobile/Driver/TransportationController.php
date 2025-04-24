@@ -150,4 +150,23 @@ class TransportationController extends Controller
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
+
+    public function getOrderTransport(string $serviceType,Request $request)
+    {
+
+
+        try {
+            $transportType = match ($serviceType) {
+
+                'travel' => new TransportTravelService($this->firebaseDatabase),
+            };
+
+            $context = new TransportContext($transportType);
+            return $orderResponse = $context->getOrderTransport($request);
+
+        } catch (Exception $e) {
+            return $this->sudResponse('error: ' . $e->getMessage(), 500);
+        }
+    }
+
 }
