@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Mobile\Driver;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vehicle;
-use App\Models\VehicleWorkRequest;
 use App\Services\Mobile\DriverWorkService;
 use App\Traits\Responses;
 use Illuminate\Http\Request;
@@ -24,9 +23,15 @@ class VehicleWorkRequestController extends Controller
      * Display list of fleet owners.
      * @return mixed
      */
-    public function indexFleetOwner()
+    public function indexFleetOwner(Request $request)
     {
-        return User::role('fleetOwner', 'api')->with('office')->get();
+        $name = $request->query('name');
+        $fleet_owners = User::role('fleetOwner', 'api')->whereHas('office')->with('office');
+        if ($name) {
+            return $fleet_owners->whereRelation('office', 'name', 'LIKE', '%' . $name . '%')->get();
+        } else {
+            return $fleet_owners->get();
+        }
     }
 
     /**
@@ -52,15 +57,15 @@ class VehicleWorkRequestController extends Controller
             $vehicle = Vehicle::findOrFail($id);
             $request = $this->driverWorkService->createWorkRequest($vehicle, $user);
 
-            return $this->indexOrShowResponse('request', $request, 201);
+            return $this->sudResponse('Request send successfully !!', 201);
         } catch (Exception $e) {
             return $this->sudResponse('error: ' . $e->getMessage(), 500);
         }
     }
 
-    
+
     /**
-     * Delte the authanticated user's specified request before it get accepted or rejected
+     * Delete the authenticated user's specified request before it get accepted or rejected
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -72,16 +77,19 @@ class VehicleWorkRequestController extends Controller
                 ->where('id', $id)
                 ->first();
             if ($request === null) {
-                return $this->sudResponse('sorre, we can not find your request.... try later', 422);
+                return $this->sudResponse('sorry, we can not find your request.... try later', 422);
             }
             $request->delete();
             return $this->sudResponse('Your request has been deleted successfully!', 200);
+        } catch (Exception $e) {
+            report($e);
+            return $this->sudResponse('An error occur while deleting the request', 400);
         }
     }
 
 
     /**
-     * Display list of authanticated user's vehicle's requests
+     * Display list of authenticated user's vehicle's requests
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function index()

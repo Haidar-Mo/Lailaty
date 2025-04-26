@@ -8,12 +8,12 @@ use App\Http\Controllers\Api\Mobile\Driver\DocumentsRegisterController;
 Route::prefix('captain')
     ->middleware([
         'auth:sanctum',
-        'ability:' . TokenAbility::ACCESS_API->value
+        'ability:' . TokenAbility::ACCESS_API->value,
+        'role:freeDriver|employeeDrive|fleetOwner'
     ])
     ->group(function () {
-        Route::middleware(['role:freeDriver|employeeDrive|fleetOwner'])
-            ->apiResource('Documents', DocumentsRegisterController::class);
-        
-            Route::middleware(['role:freeDriver|employeeDriver|fleetOwner'])
-            ->post('Documents/update', [DocumentsRegisterController::class, 'update']);
+        Route::apiResource('Documents', DocumentsRegisterController::class);
+
+        Route::post('Documents/update', [DocumentsRegisterController::class, 'update']);
+        Route::get('document/check', [DocumentsRegisterController::class, 'check']);
     });

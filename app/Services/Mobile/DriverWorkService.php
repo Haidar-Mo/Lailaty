@@ -26,7 +26,7 @@ class DriverWorkService
 
             $request = $vehicle->workRequest()->create([
                 'user_id' => $user->id,
-                'reciver_user_id' => $vehicle->user_id,
+                'receiver_user_id' => $vehicle->user_id,
                 'status' => 'pending'
             ]);
 

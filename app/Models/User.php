@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
@@ -38,11 +37,12 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'office_id',
         'image_url',
-        'rate',
-        'is_full_registered',
         'role_name',
+        'office_id',
+        'is_full_registered',
+        'has_documents',
+        'rate',
     ];
 
     /**
@@ -152,19 +152,21 @@ class User extends Authenticatable
 
     public function getImageUrlAttribute()
     {
-        if ($this->image) {
-            return Storage::disk('public')->url($this->image->path);
-        }
-        return null;
+        return $this->image->full_path ?? null ;
     }
 
     public function getIsFullRegisteredAttribute()
     {
         if ($this->first_name && $this->last_name && $this->gender && $this->birth_date) {
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
+    }
+
+    public function getHasDocumentsAttribute()
+    {
+        return $this->registrationDocument()->first() ? true : false;
     }
 
     public function getRoleNameAttribute()

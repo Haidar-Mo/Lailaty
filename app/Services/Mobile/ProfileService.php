@@ -4,6 +4,7 @@ namespace App\Services\Mobile;
 
 
 use App\Models\Image;
+use App\Traits\Responses;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Storage;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
@@ -12,6 +13,8 @@ use Exception;
 
 class ProfileService
 {
+
+    use Responses;
 
     /**
      * Handle the profile image upload and optimization.
@@ -22,40 +25,39 @@ class ProfileService
      */
     public function uploadProfileImage(User $user, $image)
     {
-        try {
-            $filename = time() . '_profile_image_for_userID' . $user->id . '.' . $image->getClientOriginalExtension();
+        if ($user->image)
+            throw new Exception("You already has an Image , delete the old one first");
 
-            // Store the image temporarily
-            $tempPath = $image->storeAs('public/tmp', $filename);
-            $tempFilePath = storage_path('app/' . $tempPath);
+        $filename = time() . '_profile_image_for_userID' . $user->id . '.' . $image->getClientOriginalExtension();
 
-            // Optimize the image
-            $optimizerChain = OptimizerChainFactory::create();
-            $optimizerChain->optimize($tempFilePath);
+        // Store the image temporarily
+        $tempPath = $image->storeAs('public/tmp', $filename);
+        $tempFilePath = storage_path('app/' . $tempPath);
 
-            // Move to final location
-            $finalPath = 'ProfileImages/' . $filename;
-            Storage::disk('public')->move('tmp/' . $filename, $finalPath);
+        // Optimize the image
+        $optimizerChain = OptimizerChainFactory::create();
+        $optimizerChain->optimize($tempFilePath);
 
-            // Delete the old image if it exists
-            if ($user->image) {
-                $oldImagePath = $user->image->path;
-                if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
-                    Storage::disk('public')->delete($oldImagePath);
-                }
+        // Move to final location
+        $finalPath = 'ProfileImages/' . $filename;
+        Storage::disk('public')->move('tmp/' . $filename, $finalPath);
+
+        // Delete the old image if it exists
+        if ($user->image) {
+            $oldImagePath = $user->image->path;
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
             }
-
-            
-            Image::updateOrCreate(
-                ['imageable_id' => $user->id, 'imageable_type' => get_class($user)],
-                ['path' => $finalPath, 'imageable_type' => get_class($user)]
-            );
-
-            return Storage::disk('public')->url($finalPath);
-        } catch (Exception $e) {
-            
-            throw new Exception("Something went wrong while uploading the image: " . $e->getMessage());
         }
+
+
+        Image::updateOrCreate(
+            ['imageable_id' => $user->id, 'imageable_type' => get_class($user)],
+            ['path' => $finalPath, 'imageable_type' => get_class($user)]
+        );
+
+        return Storage::disk('public')->url($finalPath);
+
     }
 
     /**

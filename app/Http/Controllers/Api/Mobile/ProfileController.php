@@ -46,15 +46,12 @@ class ProfileController extends Controller
         $request->validate([
             'image' => ['required', 'image'],
         ]);
-        $user = Auth::user();
+        $user = $request->user();
         try {
-            $imageUrl = $this->profileImageService->uploadProfileImage($user, $request->file('image'));
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Image profile changed successfully!',
-                'path' => $imageUrl,
-            ]);
+            $this->profileImageService->uploadProfileImage($user, $request->file('image'));
+            $user->load('image');
+            $image = $user->image;
+            return $this->indexOrShowResponse('image', $image, 200);
         } catch (Exception $e) {
 
             return response()->json([
