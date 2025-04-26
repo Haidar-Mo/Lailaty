@@ -23,7 +23,10 @@ interface InterfaceTransport
     //: Offer Section
     public function updatePriceOffer(Request $request, string $id);
 
-    public function getOrderOfferTransport();
+    
+
+    public function getOrderTransport(Request $request);
+
 
     // public function cancelOffer(Request $request, string $id);
 

@@ -110,10 +110,7 @@ class TransportTravelService implements InterfaceTransport
 
     }
 
-    public function getOrderTransport()
-    {
-        return ['body' => Order::where('type', 'shared')->where('status', 'pending')->with(['destination'])->get()];
-    }
+
 
 
     public function subscriptionOrder($id)
@@ -161,7 +158,35 @@ class TransportTravelService implements InterfaceTransport
         return response()->json(['body' => $orderOffersTravel]);
 
     }
+//يعرض تفاصيل العرض
+    public function showOffer($id){
+        $offer=OrderOffer::where('id',$id)->get()
+        ->map(function($orderOffer){
+            $vehicle=$orderOffer->vehicle;
+            $driverName=$vehicle->driver->first_name . ' ' . $vehicle->driver->last_name;
+            $vehicleRate = $vehicle->rate;
+            $vehicle_image=$vehicle->image;
+            return [
+                'id' => $orderOffer->id,
+                'price' => $orderOffer->price,
+                'vehicle_image' => $orderOffer->vehicle_id,
+                'driver_name' => $driverName,
+                'vehicle_rate' => $vehicleRate,
+                'vehicle_image'=>$vehicle_image,
+            ];
 
+        });
+
+        return ['body'=>$offer];
+
+    }
+
+   public function getOrderTransport(Request $request){
+    $user=auth()->user();
+    $orders=$user->order()->where('status',$request->status)->with(['destination'])->get();
+    return ['body'=>$orders];
+
+   }
 
 
 
@@ -210,5 +235,11 @@ class TransportTravelService implements InterfaceTransport
         }
         return response()->json(['fail']);
     }
+
+
+    //بدنا تابع بجييب تفاصيل العرض من صورة سيارة الى نقطة البداية و النهاية و تاريخ الطلب
+    //تابع بجيب الطلبات يلي عنا يلي تمت و يلي قيد التنفيذ
+    //
+
 
 }
